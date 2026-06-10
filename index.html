@@ -1,6 +1,9 @@
-<!DOCTYPE html><html lang="en">  <head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Shyvansh Portfolio</title><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet"><style>  *{
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Shyvansh Portfolio</title><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet"><style>
+
+*{
 margin:0;
 padding:0;
 box-sizing:border-box;
@@ -100,24 +103,7 @@ display:block;
 margin-bottom:25px;
 border-radius:25px;
 box-shadow:0 10px 30px rgba(0,0,0,.5);
-
-opacity:0;
-transform:translateY(80px);
-
-transition:
-opacity 1.2s ease,
-transform 1.2s ease,
-box-shadow .3s ease;
-}
-
-.card.show{
-opacity:1;
-transform:translateY(0);
-}
-
-.card:hover{
-transform:translateY(-5px) scale(1.02);
-box-shadow:0 15px 40px rgba(0,0,0,.7);
+animation:fadeUp 2s ease;
 }
 
 /* CONTACT */
@@ -175,45 +161,29 @@ transform:translateY(0);
 </style></head><body><!-- HERO --><section class="hero"><img class="logo" src="Untitled163_20260610180749.jpg" alt="Logo"><h1 class="title">SHYVANSH</h1><p class="subtitle">A Graphic Designer</p><div class="buttons">
 <a href="#pfp" class="nav-btn">PFP</a>
 <a href="#thumbs" class="nav-btn">THUMBNAILS</a>
+</div></section><!-- PFP SECTION --><section id="pfp" class="section"><h2 class="section-title">PFP</h2><img class="card"
+src="Untitled163_20260610180749.jpg"
+alt="PFP">
 
-</div></section><!-- PFP SECTION --><section id="pfp" class="section"><h2 class="section-title">PFP</h2><img class="card"  
-src="Untitled163_20260610180749.jpg"  
-alt="PFP">  </section><!-- THUMBNAILS SECTION --><section id="thumbs" class="section"><h2 class="section-title">THUMBNAILS</h2><img class="card" src="Untitled156_20260609072400.png">  
-<img class="card" src="Untitled157_20260609072544.png">  
-<img class="card" src="Untitled158_20260609072831.png">  
-<img class="card" src="Untitled158_20260609073126.png">  
-<img class="card" src="Untitled159_20260609073317.png">  
-<img class="card" src="Untitled160_20260609073519.png">  
-<img class="card" src="Untitled161_20260609074039.png">  
-<img class="card" src="Untitled162_20260609074220.png"></section><!-- CONTACT --><section class="section"><h2 class="section-title">CONTACT</h2><div class="contact-buttons"><a class="contact-btn discord"  
-href="https://discord.gg/2ZRDMKRTNy"  
-target="_blank">  
-Discord Server  
-</a>  <a class="contact-btn email"  
+</section><!-- THUMBNAILS SECTION --><section id="thumbs" class="section"><h2 class="section-title">THUMBNAILS</h2><img class="card" src="Untitled156_20260609072400.png">
+<img class="card" src="Untitled157_20260609072544.png">
+<img class="card" src="Untitled158_20260609072831.png">
+<img class="card" src="Untitled158_20260609073126.png">
+<img class="card" src="Untitled159_20260609073317.png">
+<img class="card" src="Untitled160_20260609073519.png">
+<img class="card" src="Untitled161_20260609074039.png">
+<img class="card" src="Untitled162_20260609074220.png"></section><!-- CONTACT --><section class="section"><h2 class="section-title">CONTACT</h2><div class="contact-buttons"><a class="contact-btn discord"
+href="https://discord.gg/2ZRDMKRTNy"
+target="_blank">
+Discord Server
+</a>
+
+<a class="contact-btn email"
 href="mailto:shyvanshworks@gmail.com?subject=Thumbnail%20Order">
 Email
 </a>
 
-</div></section><div class="footer">  
-© 2026 Shyvansh Portfolio  
-</div><script>
-
-const observer = new IntersectionObserver((entries)=>{
-entries.forEach((entry)=>{
-
-if(entry.isIntersecting){
-entry.target.classList.add("show");
-}
-
-});
-
-},{
-threshold:0.15
-});
-
-document.querySelectorAll(".card").forEach((card)=>{
-observer.observe(card);
-});
-
-</script></body>
+</div></section><div class="footer">
+© 2026 Shyvansh Portfolio
+</div></body>
 </html>
