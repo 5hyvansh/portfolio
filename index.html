@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHYVANSH - Thumbnail Designer & Minecraft Creator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="intro-container">
+        <!-- Video Background -->
+        <video autoplay muted loop class="intro-video">
+            <source src="assets/video/intro.mp4" type="video/mp4">
+        </video>
+        
+        <!-- Dark Overlay -->
+        <div class="intro-overlay"></div>
+        
+        <!-- Content -->
+        <div class="intro-content">
+            <h1 class="intro-title fade-up-animate">SHYVANSH</h1>
+            <p class="intro-subtitle fade-up-animate" style="animation-delay: 0.2s;">
+                Thumbnail Designer & Minecraft Content Creator
+            </p>
+            
+            <!-- Enter Button -->
+            <button class="glass-button enter-btn fade-up-animate" onclick="enterSite()" style="animation-delay: 0.4s;">
+                <span>ENTER</span>
+                <div class="glass-glow"></div>
+            </button>
+        </div>
+        
+        <!-- Top Controls -->
+        <div class="intro-controls">
+            <button class="glass-button theme-toggle" id="themeToggle" onclick="toggleTheme()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
