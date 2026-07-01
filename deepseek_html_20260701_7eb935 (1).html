@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shyvansh · Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* ───────────── RESET & BASE ───────────── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Fredoka', sans-serif;
+            overflow-x: hidden;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        /* ───────────── THEME VARIABLES ───────────── */
+        :root {
+            /* Dark (default) */
+            --bg-primary: #0b0b0b;
+            --bg-secondary: #1a0e08;
+            --bg-card: rgba(30, 15, 10, 0.55);
+            --bg-glass: rgba(40, 22, 16, 0.6);
+            --text-primary: #ffffff;
+            --text-secondary: #d4c5b2;
+            --text-muted: #a08070;
+            --border-glass: rgba(255, 255, 255, 0.10);
+            --shadow-glass: rgba(0, 0, 0, 0.6);
+            --accent: #8b6b4d;
+            --accent-hover: #a88462;
+            --nav-bg: rgba(11, 11, 11, 0.75);
+            --scrollbar: #3d2415;
+            --logo-border: rgba(255, 255, 255, 0.08);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f0eb;
+            --bg-secondary: #e8ddd0;
+            --bg-card: rgba(255, 248, 240, 0.70);
+            --bg-glass: rgba(255, 248, 240, 0.55);
+            --text-primary: #1a0e08;
+            --text-secondary: #3d2415;
+            --text-muted: #7a5f4a;
+            --border-glass: rgba(139, 107, 77, 0.15);
+            --shadow-glass: rgba(139, 107, 77, 0.15);
+            --accent: #8b6b4d;
+            --accent-hover: #6d4f35;
+            --nav-bg: rgba(245, 240, 235, 0.80);
+            --scrollbar: #c4b0a0;
+            --logo-border: rgba(139, 107, 77, 0.12);
+        }
+
+        /* ───────────── SCROLLBAR ───────────── */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar);
+            border-radius: 12px;
+        }
+
+        /* ───────────── UTILITY ───────────── */
+        .hidden {
+            display: none !important;
+        }
+
+        /* ───────────── GLASSMORPHISM ───────────── */
+        .glass {
+            background: var(--bg-glass);
+            backdrop-filter: blur(18px) saturate(1.3);
+            -webkit-backdrop-filter: blur(18px) saturate(1.3);
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 8px 32px var(--shadow-glass);
+            border-radius: 24px;
+            transition: background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .glass-btn {
+            background: var(--bg-glass);
+            backdrop-filter: blur(18px) saturate(1.3);
+            -webkit-backdrop-filter: blur(18px) saturate(1.3);
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 8px 32px var(--shadow-glass);
+            border-radius: 20px;
+            padding: 16px 42px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: 0.3px;
+            position: relative;
+            overflow: hidden;
+            will-change: transform, box-shadow, border-color;
+        }
+
+        .glass-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent 60%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .glass-btn:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 16px 48px var(--shadow-glass);
+            border-color: rgba(255, 255, 255, 0.20);
+        }
+
+        .glass-btn:active {
+            transform: scale(0.96);
+        }
+
+        .glass-btn .icon {
+            font-size: 1.3rem;
+        }
+
+        /* ───────────── PAGE CONTAINERS ───────────── */
+        .page {
+            display: none;
+            min-height: 100vh;
+            width: 100%;
+            will-change: transform, opacity;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        .page.active {
+            display: flex;
+            flex-direction: column;
+            animation: pageFadeIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes pageFadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(18px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ───────────── LANDING PAGE ───────────── */
+        #landing {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-primary);
+            will-change: transform, opacity;
+            transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        #landing.exit {
+            opacity: 0;
+            transform: scale(1.05) translateY(-8px);
+            pointer-events: none;
+        }
+
+        /* ── Video Background ── */
+        .landing-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(0.50) saturate(0.85) contrast(1.1);
+            will-change: transform;
+        }
+
+        .landing-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: radial-gradient(ellipse at center, rgba(11, 11, 11, 0.20) 0%, rgba(11, 11, 11, 0.75) 100%);
+        }
+
+        .landing-fallback {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(145deg, #0b0b0b 0%, #1a0e08 40%, #2d1810 70%, #0b0b0b 100%);
+            background-size: 400% 400%;
+            animation: gradMove 12s ease infinite;
+        }
+
+        @keyframes gradMove {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* ── Landing Content ── */
+        .landing-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .landing-title {
+            font-size: clamp(3rem, 11vw, 6rem);
+            font-weight: 700;
+            color: #fff;
+            text-shadow: 0 8px 50px rgba(0, 0, 0, 0.7);
+            letter-spacing: 4px;
+            animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+            will-change: transform, opacity;
+        }
+
+        .landing-title span {
+            color: #d4c5b2;
+        }
+
+        .landing-sub {
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            color: rgba(255, 255, 255, 0.80);
+            margin-top: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s both;
+            will-change: transform, opacity;
+        }
+
+        .landing-btn-wrap {
+            margin-top: 48px;
+            animation: fadeUp 1s cubic-bezier(0.22, 1, 0.36, 1) 0.9s both;
+            will-change: transform, opacity;
+        }
+
+        .landing-btn-wrap .glass-btn {
+            font-size: 1.4rem;
+            padding: 20px 60px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(24px) saturate(1.4);
+            -webkit-backdrop-filter: blur(24px) saturate(1.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            min-width: 200px;
+            will-change: transform, box-shadow, border-color;
+        }
+
+        .landing-btn-wrap .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            transform: translateY(-8px) scale(1.04);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.30);
+        }
+
+        .landing-btn-wrap .glass-btn .arrow {
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+        }
+        .landing-btn-wrap .glass-btn:hover .arrow {
+            transform: translateX(8px);
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px) scale(0.96);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ───────────── NAVBAR ───────────── */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 28px;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px) saturate(1.3);
+            -webkit-backdrop-filter: blur(20px) saturate(1.3);
+            border-bottom: 1px solid var(--border-glass);
+            transition: background 0.4s ease, border 0.4s ease, backdrop-filter 0.4s ease;
+            will-change: transform, background, border;
+        }
+
+        .nav-left,
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .nav-btn-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: var(--bg-glass);
+            backdrop-filter: blur(14px) saturate(1.2);
+            -webkit-backdrop-filter: blur(14px) saturate(1.2);
+            border: 1px solid var(--border-glass);
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 4px 16px var(--shadow-glass);
+            text-decoration: none;
+            will-change: transform, box-shadow, border-color;
+        }
+
+        .nav-btn-icon:hover {
+            transform: translateY(-3px) scale(1.05);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-btn-icon:active {
+            transform: scale(0.92);
+        }
+
+        .nav-brand {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            transition: color 0.4s ease;
+        }
+
+        /* ───────────── MAIN PAGE ───────────── */
+        #main {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 24px 60px;
+            background: var(--bg-primary);
+            transition: background 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #main::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 20%, rgba(139, 107, 77, 0.08) 0%, transparent 70%),
+                radial-gradient(ellipse at 70% 80%, rgba(139, 107, 77, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .main-logo {
+            width: 140px;
+            height: 140px;
+            border-radius: 40px;
+            object-fit: cover;
+            box-shadow: 0 12px 48px var(--shadow-glass);
+            border: 2px solid var(--logo-border);
+            margin-bottom: 24px;
+            transition: border 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .main-greeting {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .main-greeting span {
+            color: var(--accent);
+        }
+
+        .main-desc {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            line-height: 1.7;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .main-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            width: 100%;
+            max-width: 380px;
+            margin: 0 auto;
+        }
+
+        .main-buttons .glass-btn {
+            width: 100%;
+            padding: 18px 32px;
+            font-size: 1.15rem;
+            justify-content: center;
+            will-change: transform, box-shadow, border-color;
+        }
+
+        .main-buttons .glass-btn .icon {
+            font-size: 1.4rem;
+        }
+
+        /* ───────────── ABOUT PAGE ───────────── */
+        #about {
+            min-height: 100vh;
+            padding: 100px 24px 60px;
+            background: var(--bg-primary);
+            transition: background 0.5s ease;
+        }
+
+        .about-container {
+            max-width: 780px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .about-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 36px;
+        }
+
+        .about-logo {
+            width: 130px;
+            height: 130px;
+            border-radius: 36px;
+            object-fit: cover;
+            box-shadow: 0 12px 44px var(--shadow-glass);
+            border: 2px solid var(--logo-border);
+            margin-bottom: 18px;
+            transition: border 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .about-name {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .about-role {
+            font-size: 1.1rem;
+            color: var(--accent);
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .about-bio {
+            background: var(--bg-card);
+            backdrop-filter: blur(14px) saturate(1.2);
+            -webkit-backdrop-filter: blur(14px) saturate(1.2);
+            border: 1px solid var(--border-glass);
+            border-radius: 28px;
+            padding: 32px 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px var(--shadow-glass);
+            transition: background 0.4s ease, border 0.4s ease, box-shadow 0.4s ease;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+        }
+
+        .about-bio strong {
+            color: var(--text-primary);
+        }
+
+        .about-social {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .about-social .glass-btn {
+            padding: 14px 30px;
+            font-size: 1rem;
+            min-width: 160px;
+            flex: 1 1 auto;
+            max-width: 220px;
+            will-change: transform, box-shadow, border-color;
+        }
+
+        .about-social .glass-btn .icon {
+            font-size: 1.2rem;
+        }
+
+        /* ───────────── PORTFOLIO PAGE ───────────── */
+        #portfolio {
+            min-height: 100vh;
+            padding: 100px 24px 60px;
+            background: var(--bg-primary);
+            transition: background 0.5s ease;
+        }
+
+        .portfolio-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .portfolio-title {
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .portfolio-sub {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            margin-bottom: 40px;
+        }
+
+        .thumb-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .thumb-card {
+            border-radius: 24px;
+            overflow: hidden;
+            background: var(--bg-card);
+            backdrop-filter: blur(12px) saturate(1.2);
+            -webkit-backdrop-filter: blur(12px) saturate(1.2);
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 6px 24px var(--shadow-glass);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+            aspect-ratio: 16 / 10;
+            will-change: transform, box-shadow, border-color;
+        }
+
+        .thumb-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 18px 56px var(--shadow-glass);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .thumb-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+
+        .thumb-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .portfolio-social {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-glass);
+        }
+
+        .portfolio-social .glass-btn {
+            padding: 14px 30px;
+            font-size: 1rem;
+            min-width: 150px;
+            flex: 1 1 auto;
+            max-width: 200px;
+            will-change: transform, box-shadow, border-color;
+        }
+
+        .portfolio-social .glass-btn .icon {
+            font-size: 1.2rem;
+        }
+
+        /* ───────────── RESPONSIVE ───────────── */
+        @media (max-width: 640px) {
+            .navbar {
+                padding: 12px 16px;
+            }
+            .nav-brand {
+                font-size: 0.9rem;
+            }
+            .nav-btn-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+
+            .landing-btn-wrap .glass-btn {
+                padding: 16px 40px;
+                font-size: 1.2rem;
+                min-width: 160px;
+            }
+
+            .main-buttons .glass-btn {
+                padding: 15px 24px;
+                font-size: 1rem;
+            }
+
+            .about-bio {
+                padding: 24px 20px;
+                font-size: 0.95rem;
+            }
+
+            .about-social .glass-btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+                min-width: 130px;
+            }
+
+            .thumb-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 16px;
+            }
+
+            .portfolio-social .glass-btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+                min-width: 120px;
+            }
+
+            .main-logo {
+                width: 100px;
+                height: 100px;
+            }
+            .about-logo {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .thumb-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .landing-title {
+                font-size: 2.4rem;
+            }
+            .landing-sub {
+                font-size: 0.75rem;
+                letter-spacing: 2px;
+            }
+        }
+
+        /* ───────────── UTILITY ANIMATIONS ───────────── */
+        @keyframes pulseGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(139, 107, 77, 0.15);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(139, 107, 77, 0.30);
+            }
+        }
+
+        .pulse-glow {
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  LANDING PAGE  (full-screen video + Enter)  -->
+    <!-- ════════════════════════════════════════════ -->
+    <div id="landing">
+        <!-- Fallback gradient (visible if video fails) -->
+        <div class="landing-fallback"></div>
+
+        <!--
+        ── VIDEO ELEMENT ──
+        🔥 Replace 'your-video.mp4' with YOUR OWN Chainsaw Man clip.
+        For best results use an MP4 with H.264 codec, 720p or 1080p.
+        Recommended: a dark, action-packed scene for dramatic effect.
+        -->
+        <video class="landing-video" autoplay loop muted playsinline poster="">
+            <!--
+            👇 PASTE YOUR CHAINSAW MAN VIDEO URL HERE 👇
+            Example: https://your-cdn.com/chainsaw-man-clip.mp4
+            -->
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+            <!-- Fallback: browser will show the gradient + overlay -->
+        </video>
+
+        <div class="landing-overlay"></div>
+
+        <div class="landing-content">
+            <h1 class="landing-title">SHYVANSH</h1>
+            <p class="landing-sub">Graphic Designer · Thumbnail Artist</p>
+            <div class="landing-btn-wrap">
+                <button class="glass-btn" id="enterBtn">
+                    Enter
+                    <span class="arrow">→</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  NAVBAR  (shared across all inner pages)    -->
+    <!-- ════════════════════════════════════════════ -->
+    <nav class="navbar" id="mainNav" style="display:none;">
+        <div class="nav-left">
+            <button class="nav-btn-icon" id="backBtn" title="Back">
+                ←
+            </button>
+            <span class="nav-brand" id="navBrand">Shyvansh</span>
+        </div>
+        <div class="nav-right">
+            <button class="nav-btn-icon" id="themeToggle" title="Toggle theme">
+                ☀️
+            </button>
+        </div>
+    </nav>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  MAIN PAGE  (two buttons)                   -->
+    <!-- ════════════════════════════════════════════ -->
+    <div id="main" class="page">
+        <div class="main-container">
+            <img class="main-logo" src="Untitled163_20260610180749.jpg" alt="Shyvansh Logo" />
+            <h1 class="main-greeting">Hey, I'm <span>Shyvansh</span></h1>
+            <p class="main-desc">
+                Graphic designer &amp; thumbnail artist. I craft visuals that stop
+                the scroll and tell a story.
+            </p>
+            <div class="main-buttons">
+                <button class="glass-btn" data-page="about">
+                    <span class="icon">👤</span> About Shyvansh
+                </button>
+                <button class="glass-btn" data-page="portfolio">
+                    <span class="icon">🖼️</span> Shyvansh Portfolio
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  ABOUT PAGE                                 -->
+    <!-- ════════════════════════════════════════════ -->
+    <div id="about" class="page">
+        <div class="about-container">
+            <div class="about-header">
+                <img class="about-logo" src="Untitled163_20260610180749.jpg" alt="Shyvansh Logo" />
+                <h1 class="about-name">Shyvansh</h1>
+                <p class="about-role">✦ Graphic Designer &amp; Thumbnail Artist ✦</p>
+            </div>
+
+            <div class="about-bio">
+                <p>
+                    <strong>Hey there!</strong> I'm Shyvansh — a passionate graphic designer
+                    specialising in <strong>thumbnails</strong> that grab attention and
+                    <strong>visual storytelling</strong> that leaves a lasting impression.
+                </p>
+                <br />
+                <p>
+                    With a keen eye for composition, colour, and typography, I help
+                    creators turn casual viewers into loyal fans. Every design I craft
+                    is built with purpose, precision, and a touch of creativity that
+                    makes it stand out.
+                </p>
+                <br />
+                <p>
+                    Whether it's a gaming thumbnail, a YouTube banner, or a brand asset —
+                    I bring ideas to life, one pixel at a time.
+                </p>
+            </div>
+
+            <div class="about-social">
+                <a class="glass-btn" href="https://discord.gg/2ZRDMKRTNy" target="_blank">
+                    <span class="icon">💬</span> Discord
+                </a>
+                <a class="glass-btn" href="https://instagram.com" target="_blank">
+                    <span class="icon">📸</span> Instagram
+                </a>
+                <a class="glass-btn" href="mailto:shyvanshworks@gmail.com?subject=Thumbnail%20Order">
+                    <span class="icon">✉️</span> Email
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  PORTFOLIO PAGE  (thumbnail showcase)       -->
+    <!-- ════════════════════════════════════════════ -->
+    <div id="portfolio" class="page">
+        <div class="portfolio-container">
+            <h1 class="portfolio-title">🎨 Thumbnail Showcase</h1>
+            <p class="portfolio-sub">A collection of my recent work</p>
+
+            <div class="thumb-grid">
+                <div class="thumb-card"><img src="Untitled156_20260609072400.png" alt="Thumbnail 1" loading="lazy" /></div>
+                <div class="thumb-card"><img src="Untitled157_20260609072544.png" alt="Thumbnail 2" loading="lazy" /></div>
+                <div class="thumb-card"><img src="Untitled158_20260609072831.png" alt="Thumbnail 3" loading="lazy" /></div>
+                <div class="thumb-card"><img src="Untitled158_20260609073126.png" alt="Thumbnail 4" loading="lazy" /></div>
+                <div class="thumb-card"><img src="Untitled159_20260609073317.png" alt="Thumbnail 5" loading="lazy" /></div>
+                <div class="thumb-card"><img src="Untitled160_20260609073519.png" alt="Thumbnail 6" loading="lazy" /></div>
+                <div class="thumb-card"><img src="Untitled161_20260609074039.png" alt="Thumbnail 7" loading="lazy" /></div>
+                <div class="thumb-card"><img src="Untitled162_20260609074220.png" alt="Thumbnail 8" loading="lazy" /></div>
+            </div>
+
+            <div class="portfolio-social">
+                <a class="glass-btn" href="https://discord.gg/2ZRDMKRTNy" target="_blank">
+                    <span class="icon">💬</span> Discord
+                </a>
+                <a class="glass-btn" href="https://instagram.com" target="_blank">
+                    <span class="icon">📸</span> Instagram
+                </a>
+                <a class="glass-btn" href="mailto:shyvanshworks@gmail.com?subject=Thumbnail%20Order">
+                    <span class="icon">✉️</span> Email
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  JAVASCRIPT                                 -->
+    <!-- ════════════════════════════════════════════ -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ── DOM refs ──
+            const landing = document.getElementById('landing');
+            const enterBtn = document.getElementById('enterBtn');
+            const mainNav = document.getElementById('mainNav');
+            const backBtn = document.getElementById('backBtn');
+            const themeToggle = document.getElementById('themeToggle');
+
+            const pages = {
+                main: document.getElementById('main'),
+                about: document.getElementById('about'),
+                portfolio: document.getElementById('portfolio'),
+            };
+
+            const navBrand = document.getElementById('navBrand');
+
+            // ── State ──
+            let currentPage = 'main';
+            let pageHistory = ['main'];
+            let theme = 'dark';
+            let isTransitioning = false;
+
+            // ── Helpers ──
+            function showPage(id, instant = false) {
+                // hide all
+                Object.values(pages).forEach(p => {
+                    p.classList.remove('active');
+                    p.style.animation = 'none';
+                });
+
+                // show target
+                const target = pages[id];
+                if (target) {
+                    target.classList.add('active');
+                    // re-trigger animation for smoothness
+                    requestAnimationFrame(() => {
+                        target.style.animation = '';
+                        // Force reflow for smooth animation
+                        void target.offsetHeight;
+                        target.style.animation = 'pageFadeIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards';
+                    });
+                }
+
+                currentPage = id;
+                const labels = { main: 'Shyvansh', about: 'About', portfolio: 'Portfolio' };
+                navBrand.textContent = labels[id] || 'Shyvansh';
+                mainNav.style.display = 'flex';
+                window.scrollTo({ top: 0, behavior: 'instant' });
+            }
+
+            function goToPage(id) {
+                if (id === currentPage || isTransitioning) return;
+                isTransitioning = true;
+                pageHistory.push(id);
+                showPage(id);
+                setTimeout(() => { isTransitioning = false; }, 500);
+            }
+
+            function goBack() {
+                if (pageHistory.length <= 1 || isTransitioning) return;
+                isTransitioning = true;
+                pageHistory.pop();
+                const prev = pageHistory[pageHistory.length - 1];
+                showPage(prev);
+                setTimeout(() => { isTransitioning = false; }, 500);
+            }
+
+            // ── Theme ──
+            function setTheme(mode) {
+                theme = mode;
+                document.documentElement.setAttribute('data-theme', mode === 'light' ? 'light' : '');
+                themeToggle.textContent = mode === 'light' ? '🌙' : '☀️';
+                localStorage.setItem('shyvansh-theme', mode);
+            }
+
+            function toggleTheme() {
+                setTheme(theme === 'dark' ? 'light' : 'dark');
+            }
+
+            // load saved theme
+            const saved = localStorage.getItem('shyvansh-theme');
+            setTheme(saved || 'dark');
+
+            // ── Landing "Enter" ──
+            enterBtn.addEventListener('click', function() {
+                landing.classList.add('exit');
+                setTimeout(() => {
+                    landing.style.display = 'none';
+                    pageHistory = ['main'];
+                    showPage('main', true);
+                }, 700);
+            });
+
+            // ── Main page buttons (data-page) ──
+            document.querySelectorAll('[data-page]').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const page = this.getAttribute('data-page');
+                    if (page) goToPage(page);
+                });
+            });
+
+            // ── Back button ──
+            backBtn.addEventListener('click', goBack);
+
+            // ── Theme toggle ──
+            themeToggle.addEventListener('click', toggleTheme);
+
+            // ── Keyboard shortcuts ──
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && landing.style.display === 'none') {
+                    goBack();
+                }
+                if ((e.key === 't' || e.key === 'T') && !e.ctrlKey && !e.metaKey) {
+                    toggleTheme();
+                }
+            });
+
+            // ── Ensure landing is visible on load ──
+            landing.style.display = 'flex';
+            landing.classList.remove('exit');
+
+            // ── Preload video for smoother start ──
+            const vid = document.querySelector('.landing-video');
+            if (vid) {
+                vid.addEventListener('loadeddata', () => {
+                    vid.play().catch(() => {});
+                });
+                // Try to play immediately
+                vid.play().catch(() => {});
+            }
+
+            console.log('🚀 Shyvansh Portfolio — smooth & fast');
+            console.log('💡 Press "T" to toggle theme, "Esc" to go back');
+            console.log('🎬 Replace the video source with your own Chainsaw Man clip!');
+
+        })();
+    </script>
+
+</body>
+</html>
