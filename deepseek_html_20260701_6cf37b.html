@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="SHYVANSH - Premium Thumbnail Designer & Minecraft Content Creator Portfolio">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>SHYVANSH | Thumbnail Designer & Minecraft Creator</title>
+    <style>
+        :root {
+            --bg-primary: #080808;
+            --bg-secondary: #140e0a;
+            --bg-gradient: linear-gradient(160deg, #080808 0%, #140e0a 40%, #1a1008 100%);
+            --accent: #9b6b43;
+            --accent-light: #b8845c;
+            --accent-glow: rgba(155, 107, 67, 0.5);
+            --glass-bg: rgba(255, 255, 255, 0.04);
+            --glass-bg-hover: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.10);
+            --glass-border-hover: rgba(255, 255, 255, 0.20);
+            --glass-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+            --glass-shadow-hover: 0 16px 56px rgba(0, 0, 0, 0.6), 0 0 40px rgba(155, 107, 67, 0.15);
+            --text-primary: #f0ece8;
+            --text-secondary: #b8a99a;
+            --text-muted: #7a6e62;
+            --overlay-dark: rgba(0, 0, 0, 0.65);
+            --card-bg: rgba(20, 14, 10, 0.55);
+            --transition-speed: 0.5s;
+            --border-radius-lg: 24px;
+            --border-radius-md: 16px;
+            --border-radius-sm: 12px;
+            --font-display: 'Georgia', 'Times New Roman', serif;
+            --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+        }
+
+        body.light-mode {
+            --bg-primary: #f7f3ee;
+            --bg-secondary: #ede3d8;
+            --bg-gradient: linear-gradient(160deg, #f7f3ee 0%, #ede3d8 40%, #e8d9c8 100%);
+            --accent: #8b5a3c;
+            --accent-light: #a0724e;
+            --accent-glow: rgba(139, 90, 60, 0.35);
+            --glass-bg: rgba(0, 0, 0, 0.03);
+            --glass-bg-hover: rgba(0, 0, 0, 0.06);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glass-border-hover: rgba(0, 0, 0, 0.16);
+            --glass-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            --glass-shadow-hover: 0 16px 56px rgba(0, 0, 0, 0.12), 0 0 40px rgba(139, 90, 60, 0.10);
+            --text-primary: #1a1008;
+            --text-secondary: #5c4333;
+            --text-muted: #8a7565;
+            --overlay-dark: rgba(0, 0, 0, 0.35);
+            --card-bg: rgba(255, 250, 245, 0.55);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ─── FIXED NAVIGATION ─────────────────────────── */
+        #nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            pointer-events: none;
+        }
+        #nav>* {
+            pointer-events: auto;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            box-shadow: var(--glass-shadow);
+            white-space: nowrap;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-btn:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            box-shadow: var(--glass-shadow-hover);
+            transform: translateY(-2px);
+        }
+        .nav-btn:active {
+            transform: scale(0.94);
+            transition: transform 0.15s ease;
+        }
+        .nav-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-20px);
+        }
+        #themeToggle {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            justify-content: center;
+            gap: 0;
+        }
+        #themeToggle .icon-sun,
+        #themeToggle .icon-moon {
+            transition: opacity 0.3s ease, transform 0.4s ease;
+        }
+        body.light-mode #themeToggle .icon-moon {
+            opacity: 0;
+            transform: rotate(90deg) scale(0.5);
+            position: absolute;
+        }
+        body.light-mode #themeToggle .icon-sun {
+            opacity: 1;
+            transform: rotate(0) scale(1);
+        }
+        body:not(.light-mode) #themeToggle .icon-sun {
+            opacity: 0;
+            transform: rotate(-90deg) scale(0.5);
+            position: absolute;
+        }
+        body:not(.light-mode) #themeToggle .icon-moon {
+            opacity: 1;
+            transform: rotate(0) scale(1);
+        }
+        #themeToggle {
+            position: relative;
+        }
+
+        /* ─── PAGE SECTIONS ────────────────────────────── */
+        .page {
+            position: fixed;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.6s;
+            visibility: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 1;
+        }
+        .page.active {
+            opacity: 1;
+            pointer-events: auto;
+            visibility: visible;
+            z-index: 2;
+        }
+
+        /* ─── INTRO SCREEN ─────────────────────────────── */
+        #intro {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+        #introVideo {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(0.45);
+            transition: filter 0.8s ease;
+        }
+        body.light-mode #introVideo {
+            filter: brightness(0.7) saturate(0.8);
+        }
+        #intro .video-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: var(--overlay-dark);
+            pointer-events: none;
+            transition: background var(--transition-speed) ease;
+        }
+        #intro .intro-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        #intro .intro-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.8rem, 7vw, 6rem);
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: #fff;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+            animation: fadeUpReveal 1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            opacity: 0;
+            line-height: 1.1;
+        }
+        #intro .intro-subtitle {
+            font-size: clamp(0.95rem, 2vw, 1.25rem);
+            color: rgba(220, 210, 200, 0.9);
+            letter-spacing: 0.04em;
+            font-weight: 400;
+            animation: fadeUpReveal 1s cubic-bezier(0.25, 0.8, 0.25, 1) 0.25s forwards;
+            opacity: 0;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+        }
+        #intro .enter-btn {
+            animation: fadeUpReveal 0.9s cubic-bezier(0.25, 0.8, 0.25, 1) 0.5s forwards;
+            opacity: 0;
+            margin-top: 12px;
+            padding: 16px 48px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 0 rgba(155, 107, 67, 0);
+            text-transform: uppercase;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #intro .enter-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: scale(1.06);
+            box-shadow: 0 14px 44px rgba(0, 0, 0, 0.5), 0 0 60px rgba(155, 107, 67, 0.25);
+        }
+        #intro .enter-btn:active {
+            transform: scale(0.94);
+            transition: transform 0.15s ease;
+        }
+
+        @keyframes fadeUpReveal {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ─── HOME PAGE ────────────────────────────────── */
+        #home {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-gradient);
+            background-image: var(--bg-gradient);
+        }
+        #home .home-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('Untitled156_20260609072400.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.25;
+            filter: blur(30px) brightness(0.6);
+            z-index: 0;
+            transition: opacity var(--transition-speed) ease;
+        }
+        body.light-mode #home .home-bg {
+            opacity: 0.15;
+            filter: blur(30px) brightness(1.2);
+        }
+        #home .home-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .home-card {
+            width: 100%;
+            padding: 36px 28px;
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--glass-border);
+            background: var(--card-bg);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            box-shadow: var(--glass-shadow);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.45s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            animation: fadeUpReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            opacity: 0;
+            -webkit-tap-highlight-color: transparent;
+            transform: translateY(0);
+        }
+        .home-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        .home-card:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+        .home-card:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            box-shadow: var(--glass-shadow-hover);
+            transform: translateY(-6px);
+        }
+        .home-card:active {
+            transform: scale(0.96);
+            transition: transform 0.18s ease;
+        }
+        .home-card .card-icon {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .home-card .card-title {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+        .home-card .card-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.03em;
+        }
+
+        /* ─── ABOUT PAGE ───────────────────────────────── */
+        #about {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 60px;
+            background: var(--bg-gradient);
+            gap: 40px;
+        }
+        #about .about-hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            text-align: center;
+            animation: fadeUpReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            opacity: 0;
+        }
+        #about .logo-frame {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 40px var(--accent-glow), 0 8px 32px rgba(0, 0, 0, 0.4);
+            animation: float 5s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-14px);
+            }
+        }
+        #about .logo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        #about .about-name {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--text-primary);
+        }
+        #about .about-title {
+            font-size: 1rem;
+            color: var(--accent-light);
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+        #about .about-text {
+            max-width: 620px;
+            text-align: center;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            animation: fadeUpReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) 0.2s forwards;
+            opacity: 0;
+            padding: 0 10px;
+        }
+        #about .social-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            animation: fadeUpReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) 0.35s forwards;
+            opacity: 0;
+            width: 100%;
+            max-width: 500px;
+        }
+        .social-btn {
+            flex: 1 1 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 22px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            text-decoration: none;
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            box-shadow: var(--glass-shadow);
+            -webkit-tap-highlight-color: transparent;
+            white-space: nowrap;
+        }
+        .social-btn:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            box-shadow: var(--glass-shadow-hover);
+            transform: translateY(-3px);
+        }
+        .social-btn:active {
+            transform: scale(0.93);
+            transition: transform 0.15s ease;
+        }
+        .social-btn .s-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        /* ─── PORTFOLIO PAGE ───────────────────────────── */
+        #portfolio {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 100px 20px 60px;
+            background: var(--bg-gradient);
+            gap: 30px;
+        }
+        #portfolio .portfolio-hero {
+            text-align: center;
+            animation: fadeUpReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            opacity: 0;
+        }
+        #portfolio .portfolio-hero h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            color: var(--text-primary);
+        }
+        #portfolio .portfolio-hero p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            letter-spacing: 0.03em;
+            margin-top: 6px;
+        }
+        .masonry-grid {
+            column-count: 3;
+            column-gap: 16px;
+            width: 100%;
+            max-width: 1100px;
+            padding: 0 8px;
+        }
+        @media (max-width: 900px) {
+            .masonry-grid {
+                column-count: 2;
+                column-gap: 12px;
+            }
+        }
+        @media (max-width: 550px) {
+            .masonry-grid {
+                column-count: 1;
+                column-gap: 0;
+            }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 16px;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            transform: translateY(30px);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .masonry-item.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .masonry-item:hover {
+            transform: perspective(600px) rotateY(1.5deg) rotateX(-1.5deg) scale(1.03);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 30px var(--accent-glow);
+            z-index: 5;
+        }
+        .masonry-item img {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+            object-fit: cover;
+        }
+        .masonry-item:hover img {
+            transform: scale(1.06);
+        }
+        .masonry-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 40%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+            border-radius: var(--border-radius-md);
+        }
+        .masonry-item:hover::after {
+            opacity: 1;
+        }
+        #portfolio .social-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            animation: fadeUpReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) 0.5s forwards;
+            opacity: 0;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 10px;
+        }
+
+        /* ─── LIGHTBOX ─────────────────────────────────── */
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.92);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        #lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #lightbox img {
+            max-width: 92vw;
+            max-height: 90vh;
+            border-radius: var(--border-radius-md);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            transform: scale(0.85);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+            object-fit: contain;
+            cursor: default;
+        }
+        #lightbox.active img {
+            transform: scale(1);
+        }
+        #lightbox .lb-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            color: #fff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 2001;
+            -webkit-tap-highlight-color: transparent;
+        }
+        #lightbox .lb-close:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: scale(1.08);
+        }
+
+        /* ─── SCROLLBAR ────────────────────────────────── */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(155, 107, 67, 0.4);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(155, 107, 67, 0.7);
+        }
+
+        /* ─── RESPONSIVE FINE-TUNING ──────────────────── */
+        @media (max-width: 768px) {
+            #nav {
+                padding: 10px 12px;
+            }
+            .nav-btn {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+                gap: 4px;
+            }
+            #themeToggle {
+                width: 38px;
+                height: 38px;
+                font-size: 1.1rem;
+            }
+            .home-card {
+                padding: 26px 20px;
+            }
+            .home-card .card-title {
+                font-size: 1.3rem;
+            }
+            #about {
+                padding: 80px 16px 40px;
+            }
+            #portfolio {
+                padding: 80px 12px 40px;
+            }
+            #about .logo-frame {
+                width: 100px;
+                height: 100px;
+            }
+            #intro .enter-btn {
+                padding: 14px 36px;
+                font-size: 0.95rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .social-btn {
+                flex: 1 1 100%;
+                min-width: 140px;
+            }
+            #about .social-section,
+            #portfolio .social-section {
+                gap: 10px;
+            }
+            .masonry-grid {
+                column-gap: 10px;
+            }
+            .masonry-item {
+                margin-bottom: 10px;
+                border-radius: var(--border-radius-sm);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ─── FIXED NAVIGATION ─────────────────────────── -->
+    <nav id="nav">
+        <button id="backBtn" class="nav-btn hidden" onclick="goBack()" aria-label="Go back">
+            ← <span style="margin-left:2px;">Back</span>
+        </button>
+        <button id="themeToggle" class="nav-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+            <span class="icon-moon">🌙</span>
+            <span class="icon-sun">☀️</span>
+        </button>
+    </nav>
+
+    <!-- ─── INTRO SCREEN ─────────────────────────────── -->
+    <section id="intro" class="page active">
+        <video id="introVideo" autoplay muted loop playsinline preload="auto"
+        poster="Untitled156_20260609072400.png">
+        <source
+        src="From%20Klickpin.com-%20Tender%20love%20notes%20packed%20with%20simple%20charm%20and%20useful%20ideas%20with%20timeless%20style%20for%20cozy%20hearts-pin-id-617837642703870778.mp4"
+        type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="video-overlay"></div>
+    <div class="intro-content">
+        <h1 class="intro-title">SHYVANSH</h1>
+        <p class="intro-subtitle">Thumbnail Designer &amp; Minecraft Content Creator</p>
+        <button class="enter-btn" onclick="navigateTo('home')">ENTER</button>
+    </div>
+</section>
+
+<!-- ─── HOME PAGE ────────────────────────────────── -->
+<section id="home" class="page">
+    <div class="home-bg"></div>
+    <div class="home-content">
+        <div class="home-card" onclick="navigateTo('about')">
+            <span class="card-icon">👤</span>
+            <div class="card-title">About Shyvansh</div>
+            <div class="card-subtitle">Learn more about the creator</div>
+        </div>
+        <div class="home-card" onclick="navigateTo('portfolio')">
+            <span class="card-icon">🎨</span>
+            <div class="card-title">Shyvansh Portfolio</div>
+            <div class="card-subtitle">Explore my creative work</div>
+        </div>
+    </div>
+</section>
+
+<!-- ─── ABOUT PAGE ───────────────────────────────── -->
+<section id="about" class="page">
+    <div class="about-hero">
+        <div class="logo-frame">
+            <img src="IMG_20260701_010225.jpg" alt="Shyvansh Logo" loading="eager">
+        </div>
+        <h2 class="about-name">SHYVANSH</h2>
+        <p class="about-title">Thumbnail Designer, Minecraft Creator &amp; Creative Editor</p>
+    </div>
+    <p class="about-text">
+        Shyvansh is a passionate Minecraft content creator and professional thumbnail designer
+        dedicated to crafting visually stunning, high-impact visuals that captivate audiences.
+        With a deep love for the Minecraft community, Shyvansh combines creative editing skills
+        with a keen eye for design to produce thumbnails that stand out in a crowded feed.
+        <br><br>
+        From cinematic scene compositions to bold typography and atmospheric color grading,
+        every thumbnail is a piece of art. Shyvansh's journey in creative editing has been
+        fueled by a relentless drive to push boundaries and deliver premium-quality work
+        that helps content creators shine.
+    </p>
+    <div class="social-section">
+        <a href="https://instagram.com/5hyvansh" target="_blank" rel="noopener" class="social-btn">
+            <span class="s-icon">📷</span> Instagram
+        </a>
+        <a href="https://discord.gg/DgPevy7wej" target="_blank" rel="noopener" class="social-btn">
+            <span class="s-icon">💬</span> Discord
+        </a>
+        <a href="mailto:shyvanshworks@gmail.com" class="social-btn">
+            <span class="s-icon">✉️</span> Email
+        </a>
+    </div>
+</section>
+
+<!-- ─── PORTFOLIO PAGE ───────────────────────────── -->
+<section id="portfolio" class="page">
+    <div class="portfolio-hero">
+        <h2>MY PORTFOLIO</h2>
+        <p>A showcase of my Minecraft thumbnails and creative work.</p>
+    </div>
+    <div class="masonry-grid" id="masonryGrid">
+        <!-- Thumbnails injected by JS -->
+    </div>
+    <div class="social-section">
+        <a href="https://instagram.com/5hyvansh" target="_blank" rel="noopener" class="social-btn">
+            <span class="s-icon">📷</span> Instagram
+        </a>
+        <a href="https://discord.gg/DgPevy7wej" target="_blank" rel="noopener" class="social-btn">
+            <span class="s-icon">💬</span> Discord
+        </a>
+        <a href="mailto:shyvanshworks@gmail.com" class="social-btn">
+            <span class="s-icon">✉️</span> Email
+        </a>
+    </div>
+</section>
+
+<!-- ─── LIGHTBOX ─────────────────────────────────── -->
+<div id="lightbox" onclick="closeLightbox()">
+    <button class="lb-close" onclick="closeLightbox()" aria-label="Close lightbox">✕</button>
+    <img src="" alt="Portfolio thumbnail enlarged" id="lightboxImg">
+</div>
+
+<script>
+    (function() {
+        // ─── STATE ────────────────────────────────────
+        const pageOrder = ['intro', 'home', 'about', 'portfolio'];
+        let currentPage = 'intro';
+        let pageHistory = ['intro'];
+        let isTransitioning = false;
+
+        // ─── DOM REFS ─────────────────────────────────
+        const pages = {};
+        pageOrder.forEach(id => { pages[id] = document.getElementById(id); });
+        const backBtn = document.getElementById('backBtn');
+        const themeToggle = document.getElementById('themeToggle');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const masonryGrid = document.getElementById('masonryGrid');
+        const introVideo = document.getElementById('introVideo');
+
+        // ─── THUMBNAIL LIST ───────────────────────────
+        const thumbnailFiles = [
+            'Untitled156_20260609072400.png',
+            'Untitled157_20260609072544.png',
+            'Untitled158_20260609072831.png',
+            'Untitled158_20260609073126.png',
+            'Untitled159_20260609073317.png',
+            'Untitled160_20260609073519.png',
+            'Untitled161_20260609074039.png',
+            'Untitled162_20260609074220.png',
+            'Untitled163_20260610180749.jpg',
+        ];
+
+        // ─── BUILD MASONRY GRID ───────────────────────
+        function buildMasonryGrid() {
+            if (!masonryGrid) return;
+            masonryGrid.innerHTML = '';
+            thumbnailFiles.forEach((file, index) => {
+                const item = document.createElement('div');
+                item.className = 'masonry-item';
+                item.style.transitionDelay = (index * 0.06) + 's';
+                const img = document.createElement('img');
+                img.src = file;
+                img.alt = 'Shyvansh Thumbnail ' + (index + 1);
+                img.loading = 'lazy';
+                img.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openLightbox(file);
+                });
+                item.appendChild(img);
+                item.addEventListener('click', () => openLightbox(file));
+                masonryGrid.appendChild(item);
+            });
+            // Trigger reveal after a short delay
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    revealMasonryItems();
+                });
+            });
+        }
+
+        function revealMasonryItems() {
+            const items = document.querySelectorAll('.masonry-item');
+            if (items.length === 0) return;
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+            items.forEach(item => observer.observe(item));
+            // Fallback: reveal all after 2 seconds if observer hasn't fired
+            setTimeout(() => {
+                items.forEach(item => {
+                    if (!item.classList.contains('revealed')) {
+                        item.classList.add('revealed');
+                    }
+                });
+            }, 2500);
+        }
+
+        // ─── LIGHTBOX ──────────────────────────────────
+        function openLightbox(src) {
+            if (!lightbox || !lightboxImg) return;
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            if (!lightbox) return;
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+            // Delay clearing src to allow fade-out
+            setTimeout(() => {
+                if (!lightbox.classList.contains('active') && lightboxImg) {
+                    lightboxImg.src = '';
+                }
+            }, 400);
+        }
+
+        // ─── NAVIGATION ───────────────────────────────
+        function navigateTo(pageId) {
+            if (isTransitioning) return;
+            if (pageId === currentPage) return;
+            if (!pages[pageId]) return;
+            isTransitioning = true;
+
+            // Deactivate current page
+            if (pages[currentPage]) {
+                pages[currentPage].classList.remove('active');
+            }
+
+            // Activate new page
+            pages[pageId].classList.add('active');
+            pageHistory.push(pageId);
+            currentPage = pageId;
+
+            // Update back button visibility
+            updateBackButton();
+
+            // Handle intro video playback
+            if (pageId === 'intro') {
+                if (introVideo && introVideo.paused) {
+                    introVideo.currentTime = 0;
+                    introVideo.play().catch(() => {});
+                }
+            } else {
+                if (introVideo && !introVideo.paused) {
+                    introVideo.pause();
+                }
+            }
+
+            // Scroll to top of new page
+            if (pages[pageId]) {
+                pages[pageId].scrollTop = 0;
+            }
+
+            // Re-trigger masonry reveals if navigating to portfolio
+            if (pageId === 'portfolio') {
+                setTimeout(revealMasonryItems, 300);
+            }
+
+            // Re-trigger about animations
+            if (pageId === 'about') {
+                const aboutHero = document.querySelector('#about .about-hero');
+                const aboutText = document.querySelector('#about .about-text');
+                const aboutSocial = document.querySelector('#about .social-section');
+                [aboutHero, aboutText, aboutSocial].forEach(el => {
+                    if (el) {
+                        el.style.animation = 'none';
+                        el.offsetHeight;
+                        el.style.animation = '';
+                    }
+                });
+            }
+
+            setTimeout(() => {
+                isTransitioning = false;
+            }, 650);
+        }
+
+        function goBack() {
+            if (isTransitioning) return;
+            if (pageHistory.length <= 1) return;
+            pageHistory.pop(); // Remove current page
+            const previousPage = pageHistory[pageHistory.length - 1];
+            if (previousPage && pages[previousPage]) {
+                navigateTo(previousPage);
+                // Remove the duplicate that navigateTo adds
+                pageHistory.pop();
+            }
+        }
+
+        function updateBackButton() {
+            if (!backBtn) return;
+            if (currentPage === 'intro') {
+                backBtn.classList.add('hidden');
+            } else {
+                backBtn.classList.remove('hidden');
+            }
+        }
+
+        // ─── THEME TOGGLE ──────────────────────────────
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('shyvansh-theme', isLight ? 'light' : 'dark');
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem('shyvansh-theme');
+            if (saved === 'light') {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+        }
+
+        // ─── KEYBOARD NAVIGATION ──────────────────────
+        function handleKeyboard(e) {
+            if (e.key === 'Escape') {
+                if (lightbox && lightbox.classList.contains('active')) {
+                    closeLightbox();
+                }
+            }
+            if (e.key === 'Backspace' && currentPage !== 'intro') {
+                if (lightbox && lightbox.classList.contains('active')) {
+                    closeLightbox();
+                    return;
+                }
+                e.preventDefault();
+                goBack();
+            }
+        }
+
+        // ─── INIT ──────────────────────────────────────
+        function init() {
+            loadTheme();
+            buildMasonryGrid();
+            updateBackButton();
+
+            // Expose functions to global scope for inline onclick handlers
+            window.navigateTo = navigateTo;
+            window.goBack = goBack;
+            window.toggleTheme = toggleTheme;
+            window.closeLightbox = closeLightbox;
+
+            // Keyboard listener
+            document.addEventListener('keydown', handleKeyboard);
+
+            // Lightbox click-outside
+            if (lightbox) {
+                lightbox.addEventListener('click', function(e) {
+                    if (e.target === lightbox) {
+                        closeLightbox();
+                    }
+                });
+            }
+
+            // Ensure intro video plays
+            if (introVideo) {
+                introVideo.play().catch(() => {
+                    // Autoplay blocked; video will show poster
+                    console.log('Autoplay blocked – user interaction required on some browsers.');
+                });
+                // Retry play on first user interaction
+                const retryPlay = () => {
+                    if (introVideo.paused && currentPage === 'intro') {
+                        introVideo.play().catch(() => {});
+                    }
+                    document.removeEventListener('click', retryPlay);
+                    document.removeEventListener('touchstart', retryPlay);
+                };
+                document.addEventListener('click', retryPlay, { once: true });
+                document.addEventListener('touchstart', retryPlay, { once: true });
+            }
+
+            // Initial masonry reveal if portfolio is somehow visible
+            setTimeout(revealMasonryItems, 800);
+
+            console.log('%c✨ SHYVANSH Portfolio Ready %c| %cPremium Glassmorphism UI',
+                'font-size:1.2em;color:#b8845c;',
+                '',
+                'color:#9b6b43;');
+            console.log('%c🖌️ Thumbnail Designer & Minecraft Content Creator',
+                'color:#b8a99a;font-style:italic;');
+        }
+
+        // ─── DOM READY ─────────────────────────────────
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    })();
+</script>
+</body>
+</html>
