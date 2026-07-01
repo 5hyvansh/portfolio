@@ -1,6 +1,0 @@
-bash
-
-rm -rf /mnt/user-data/outputs/*.html /mnt/user-data/outputs/*.css /mnt/user-data/outputs/*.js 2>/dev/null; echo "Cleared existing files"
-Output
-
-Cleared existing files
