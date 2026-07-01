@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - SHYVANSH</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page-container portfolio-page">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <button class="glass-button back-btn" onclick="goBack()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </button>
+            <button class="glass-button theme-toggle" id="themeToggle" onclick="toggleTheme()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="portfolio-hero">
+            <h1 class="fade-up-animate">MY PORTFOLIO</h1>
+            <p class="fade-up-animate" style="animation-delay: 0.1s;">
+                A showcase of my Minecraft thumbnails and creative work
+            </p>
+        </section>
+
+        <!-- Portfolio Grid -->
+        <section class="portfolio-section">
+            <div class="masonry-grid" id="masonryGrid">
+                <!-- Images will be loaded here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Social Section -->
+        <section class="portfolio-social">
+            <div class="social-buttons fade-up-animate">
+                <button class="glass-button social-btn" onclick="openLink('https://instagram.com/5hyvansh')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor"/>
+                    </svg>
+                    <span>Instagram</span>
+                </button>
+                <button class="glass-button social-btn" onclick="openLink('https://discord.gg/DgPevy7wej')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.317 4.3671a19.8062 19.8062 0 00-4.885-1.515.0741.0741 0 00-.0785.0371c-.211.3671-.445.847-.608 1.23a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.618-1.23.077.077 0 00-.079-.037 19.7355 19.7355 0 00-4.885 1.515.0699.0699 0 00-.032.0277C1.534 8.349.91 12.1993 1.6838 15.9297a.0764.0764 0 00.0292.0488c2.0448 1.4765 4.0321 2.3698 5.9886 2.931.0164.0041.0334-.0122.041-.0215a13.6995 13.6995 0 001.063-1.7265.0757.0757 0 00-.0416-.1053c-.6994-.2137-1.3654-.4743-2.0067-.7416a.0766.0766 0 01-.0076-.1256c.1348-.1003.2707-.204.4018-.3062a.0758.0758 0 01.0786-.0122c4.211 1.9653 8.787 1.9653 12.9557 0a.0757.0757 0 01.0787.0122c.1311.1022.267.2059.4018.3062a.0766.0766 0 01-.0075.1256c-.6412.2673-1.3069.5279-2.0067.7416a.0757.0757 0 00-.0416.1053c.3038.6172.6337 1.2211 1.063 1.7265a.0757.0757 0 00.041.0215c1.947.5008 3.935 1.3945 5.979 2.931a.0755.0755 0 00.029-.0488c.822-4.7852-.1385-8.9318-2.3915-12.5931a.0771.0771 0 00-.032-.0277zM8.02 15.3312c-1.1825 0-2.1569-.9718-2.1569-2.1575 0-1.1858.9518-2.1575 2.1569-2.1575 1.2051 0 2.1779.9717 2.1569 2.1575 0 1.1857-.9518 2.1575-2.1569 2.1575zm7.9748 0c-1.1825 0-2.1569-.9718-2.1569-2.1575 0-1.1858.9518-2.1575 2.1569-2.1575 1.2051 0 2.1779.9717 2.1569 2.1575 0 1.1857-.9518 2.1575-2.1569 2.1575z"/>
+                    </svg>
+                    <span>Discord</span>
+                </button>
+                <button class="glass-button social-btn" onclick="openLink('mailto:shyvanshworksgmail.com')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <span>Email</span>
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <button class="lightbox-close" onclick="closeLightbox()">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <img id="lightboxImage" src="" alt="Portfolio Item">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
