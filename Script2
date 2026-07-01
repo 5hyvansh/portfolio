@@ -1,0 +1,8 @@
+bash
+
+ls -la /mnt/user-data/uploads/ | head -20
+Output
+
+total 4
+drwxr-xr-x 1 claude ubuntu    0 Jul  1 04:44 .
+drwxr-xr-x 5 root   root   4096 Jul  1 04:44 ..
