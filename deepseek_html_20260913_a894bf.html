@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Shyvansh Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a; color: #fff;
+      min-height: 100vh; padding: 2rem 1rem;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    /* LOGIN */
+    .login-wrap {
+      min-height: 80vh; display: flex; align-items: center; justify-content: center;
+    }
+    .login-card {
+      background: #111; border: 1.5px solid #333; border-radius: 24px;
+      padding: 2.5rem; width: 100%; max-width: 400px;
+    }
+    .login-card h1 {
+      font-size: 1.4rem; letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+    .login-card p { color: #888; font-size: 0.85rem; margin-bottom: 1.8rem; }
+    .login-card input {
+      width: 100%; padding: 0.9rem 1rem; margin-bottom: 0.8rem;
+      background: #000; border: 1.5px solid #333; border-radius: 12px;
+      color: #fff; font-family: inherit; font-size: 0.9rem;
+    }
+    .login-card input:focus { outline: none; border-color: #fff; }
+    .login-card button {
+      width: 100%; padding: 0.9rem; background: #fff; color: #000;
+      border: 2px solid #fff; border-radius: 40px; font-weight: 700;
+      letter-spacing: 0.1em; cursor: pointer; font-family: inherit;
+      font-size: 0.85rem; text-transform: uppercase; transition: 0.2s;
+      margin-top: 0.5rem;
+    }
+    .login-card button:hover { background: transparent; color: #fff; }
+    .login-card button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .login-error {
+      color: #f87171; font-size: 0.8rem; margin-top: 0.8rem;
+      display: none;
+    }
+    .login-error.show { display: block; }
+
+    /* DASHBOARD */
+    #dashboard { display: none; }
+    #dashboard.show { display: block; }
+
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 2rem; padding-bottom: 1.5rem;
+      border-bottom: 2px solid #222; flex-wrap: wrap; gap: 1rem;
+    }
+    header h1 { font-size: 1.5rem; letter-spacing: 0.05em; text-transform: uppercase; }
+    header h1 span { color: #888; font-weight: 300; font-size: 0.75rem; display: block; letter-spacing: 0.1em; }
+    .header-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .btn {
+      padding: 0.6rem 1.3rem; border-radius: 40px;
+      border: 1.5px solid #fff; background: #fff; color: #000;
+      font-weight: 700; cursor: pointer; font-family: inherit;
+      letter-spacing: 0.08em; font-size: 0.8rem;
+      text-transform: uppercase; transition: 0.2s;
+    }
+    .btn:hover { background: transparent; color: #fff; }
+    .btn-outline { background: transparent; color: #fff; }
+    .btn-outline:hover { background: #fff; color: #000; }
+    .btn-danger { background: #ff3333; border-color: #ff3333; color: #fff; }
+    .btn-danger:hover { background: #cc0000; border-color: #cc0000; }
+
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem; margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: #111; border: 1.5px solid #333; border-radius: 20px;
+      padding: 1.3rem; transition: 0.2s;
+    }
+    .stat-card:hover { border-color: #fff; transform: translateY(-3px); }
+    .stat-card .label {
+      font-size: 0.7rem; color: #888; letter-spacing: 0.15em;
+      text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .stat-card .value {
+      font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums;
+    }
+    .stat-card .sub { font-size: 0.75rem; color: #666; margin-top: 0.3rem; }
+    .stat-card.unread { border-color: #fff; background: #1a1a1a; }
+
+    .tabs {
+      display: flex; gap: 0.3rem; flex-wrap: wrap;
+      border-bottom: 1.5px solid #222; margin-bottom: 2rem;
+    }
+    .tab {
+      padding: 0.7rem 1.3rem; background: transparent; border: none;
+      color: #888; font-weight: 600; cursor: pointer;
+      font-family: inherit; font-size: 0.85rem;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      border-bottom: 2px solid transparent; transition: 0.2s;
+    }
+    .tab:hover { color: #fff; }
+    .tab.active { color: #fff; border-bottom-color: #fff; }
+    .tab .badge {
+      background: #fff; color: #000; font-size: 0.65rem;
+      padding: 0.15rem 0.5rem; border-radius: 20px; margin-left: 0.4rem;
+      font-weight: 800;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .section {
+      background: #111; border: 1.5px solid #333;
+      border-radius: 20px; padding: 1.5rem; margin-bottom: 1.5rem;
+    }
+    .section h2 {
+      font-size: 1rem; letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 1rem;
+    }
+    .section .desc { color: #888; font-size: 0.85rem; margin-bottom: 1rem; }
+
+    .input-row {
+      display: flex; gap: 0.5rem; margin-bottom: 0.7rem; flex-wrap: wrap;
+    }
+    input[type="text"], input[type="url"], input[type="email"], textarea {
+      flex: 1; min-width: 180px; padding: 0.8rem 1rem;
+      background: #000; border: 1.5px solid #333; border-radius: 12px;
+      color: #fff; font-family: inherit; font-size: 0.9rem;
+    }
+    input:focus, textarea:focus { outline: none; border-color: #fff; }
+
+    .upload-area {
+      border: 2px dashed #444; border-radius: 16px;
+      padding: 1.5rem; text-align: center; cursor: pointer;
+      transition: 0.2s; margin-bottom: 0.8rem;
+    }
+    .upload-area:hover { border-color: #fff; background: #151515; }
+    .upload-area input { display: none; }
+    .upload-area .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .upload-area .text { color: #888; font-size: 0.85rem; }
+    .upload-area .file-name { color: #fff; font-size: 0.8rem; margin-top: 0.5rem; }
+
+    .list-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.8rem; background: #0a0a0a; border: 1.5px solid #222;
+      border-radius: 12px; margin-bottom: 0.6rem; transition: 0.2s;
+    }
+    .list-item:hover { border-color: #555; }
+    .list-item img {
+      width: 60px; height: 60px; object-fit: cover; border-radius: 8px;
+      filter: grayscale(100%); border: 1px solid #333; flex-shrink: 0;
+    }
+    .list-item .info { flex: 1; min-width: 0; }
+    .list-item .info .name {
+      font-weight: 600; font-size: 0.9rem;
+      word-break: break-all; color: #fff;
+    }
+    .list-item .info .meta {
+      font-size: 0.75rem; color: #666; margin-top: 0.2rem;
+    }
+    .list-item .actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+    .icon-btn {
+      width: 34px; height: 34px; border-radius: 10px;
+      border: 1.5px solid #333; background: #000; color: #fff;
+      cursor: pointer; transition: 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem;
+    }
+    .icon-btn:hover { border-color: #fff; background: #fff; color: #000; }
+    .icon-btn.delete:hover { background: #ff3333; border-color: #ff3333; color: #fff; }
+
+    .empty-state {
+      text-align: center; padding: 2rem; color: #555;
+      border: 2px dashed #222; border-radius: 16px;
+      font-size: 0.9rem;
+    }
+
+    /* CHART */
+    .chart {
+      display: flex; align-items: flex-end; gap: 4px;
+      height: 180px; padding: 1rem 0;
+      border-bottom: 1.5px solid #333; overflow-x: auto;
+    }
+    .bar {
+      flex: 1; min-width: 18px;
+      background: linear-gradient(180deg, #fff 0%, #888 100%);
+      border-radius: 4px 4px 0 0; position: relative;
+      transition: 0.3s; min-height: 4px;
+    }
+    .bar:hover { background: #fff; }
+    .bar::after {
+      content: attr(data-value); position: absolute;
+      top: -22px; left: 50%; transform: translateX(-50%);
+      font-size: 0.7rem; color: #fff; font-weight: 700;
+      opacity: 0; transition: 0.2s; white-space: nowrap;
+    }
+    .bar:hover::after { opacity: 1; }
+    .chart-labels {
+      display: flex; gap: 4px; margin-top: 0.5rem; overflow-x: auto;
+    }
+    .chart-labels span {
+      flex: 1; min-width: 18px; text-align: center;
+      font-size: 0.6rem; color: #666;
+    }
+
+    .analytics-list { margin-top: 0.5rem; }
+    .analytics-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.6rem 0.8rem; border-bottom: 1px solid #1a1a1a;
+      font-size: 0.85rem;
+    }
+    .analytics-row:last-child { border-bottom: none; }
+    .analytics-row .key { color: #ccc; word-break: break-all; flex: 1; }
+    .analytics-row .val {
+      color: #fff; font-weight: 700; font-variant-numeric: tabular-nums;
+      padding: 0.2rem 0.8rem; background: #222;
+      border-radius: 20px; font-size: 0.75rem;
+    }
+
+    /* MESSAGES */
+    .msg-item {
+      background: #0a0a0a; border: 1.5px solid #222;
+      border-radius: 14px; padding: 1rem; margin-bottom: 0.7rem;
+      transition: 0.2s;
+    }
+    .msg-item.unread { border-color: #fff; background: #141414; }
+    .msg-item .msg-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .msg-item .msg-name { font-weight: 700; font-size: 0.95rem; }
+    .msg-item .msg-email { color: #888; font-size: 0.8rem; }
+    .msg-item .msg-date { color: #666; font-size: 0.75rem; }
+    .msg-item .msg-body {
+      color: #ccc; font-size: 0.85rem; line-height: 1.5;
+      white-space: pre-wrap; word-break: break-word;
+      margin: 0.6rem 0;
+    }
+    .msg-item .msg-actions { display: flex; gap: 0.5rem; margin-top: 0.6rem; flex-wrap: wrap; }
+    .msg-item .msg-actions a, .msg-item .msg-actions button {
+      padding: 0.4rem 1rem; border-radius: 20px;
+      font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      text-decoration: none; cursor: pointer;
+      font-family: inherit; border: 1.5px solid #444;
+      background: #000; color: #fff; transition: 0.2s;
+    }
+    .msg-item .msg-actions button:hover,
+    .msg-item .msg-actions a:hover {
+      background: #fff; color: #000; border-color: #fff;
+    }
+    .msg-item .msg-actions .del:hover {
+      background: #ff3333; border-color: #ff3333; color: #fff;
+    }
+
+    .toast {
+      position: fixed; bottom: 20px; right: 20px;
+      background: #fff; color: #000; padding: 0.9rem 1.5rem;
+      border-radius: 12px; font-weight: 700; font-size: 0.85rem;
+      transform: translateY(100px); opacity: 0; transition: 0.3s;
+      z-index: 99999; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { background: #ff3333; color: #fff; }
+
+    .back-link {
+      color: #888; text-decoration: none; font-size: 0.85rem;
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      margin-bottom: 1rem; transition: 0.2s;
+    }
+    .back-link:hover { color: #fff; }
+
+    .progress {
+      width: 100%; height: 4px; background: #222; border-radius: 20px;
+      overflow: hidden; margin-top: 0.5rem;
+    }
+    .progress-bar {
+      height: 100%; background: #fff; width: 0%;
+      transition: width 0.3s;
+    }
+
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.1rem; }
+      .stat-card .value { font-size: 1.4rem; }
+      .tab { padding: 0.5rem 0.8rem; font-size: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← Back to Portfolio</a>
+
+    <!-- LOGIN -->
+    <div class="login-wrap" id="loginWrap">
+      <div class="login-card">
+        <h1>Admin Login</h1>
+        <p>Sign in to manage your portfolio.</p>
+        <form id="loginForm">
+          <input type="email" id="loginEmail" placeholder="Email" required>
+          <input type="password" id="loginPassword" placeholder="Password" required>
+          <button type="submit" id="loginBtn">Sign In</button>
+          <div class="login-error" id="loginError"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard">
+      <header>
+        <h1>Admin Dashboard <span>Shyvansh Portfolio Control Panel</span></h1>
+        <div class="header-actions">
+          <button class="btn btn-outline" id="refreshBtn">↻ Refresh</button>
+          <button class="btn btn-outline" id="logoutBtn">Logout</button>
+        </div>
+      </header>
+
+      <!-- STATS -->
+      <div class="stats-grid" id="statsGrid"></div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <button class="tab active" data-tab="analytics">📊 Analytics</button>
+        <button class="tab" data-tab="messages">✉ Messages <span class="badge" id="msgBadge" style="display:none">0</span></button>
+        <button class="tab" data-tab="thumbnails">🖼 Thumbnails</button>
+        <button class="tab" data-tab="logos">🎨 Logos</button>
+        <button class="tab" data-tab="banners">📢 Banners</button>
+        <button class="tab" data-tab="websites">🌐 Websites</button>
+        <button class="tab" data-tab="contacts">📞 Contacts</button>
+      </div>
+
+      <!-- ANALYTICS TAB -->
+      <div class="tab-content active" id="tab-analytics">
+        <div class="section">
+          <h2>Daily Page Views (Last 14 Days)</h2>
+          <div class="chart" id="dailyChart"></div>
+          <div class="chart-labels" id="dailyLabels"></div>
+        </div>
+        <div class="section">
+          <h2>Page Views Breakdown</h2>
+          <div class="analytics-list" id="pageViewsList"></div>
+        </div>
+        <div class="section">
+          <h2>Most Clicked Images</h2>
+          <div class="analytics-list" id="imageClicksList"></div>
+        </div>
+        <div class="section">
+          <h2>Extra Info</h2>
+          <div class="analytics-list" id="extraInfo"></div>
+        </div>
+      </div>
+
+      <!-- MESSAGES TAB -->
+      <div class="tab-content" id="tab-messages">
+        <div class="section">
+          <h2>Inbox</h2>
+          <p class="desc">Messages sent by users from your portfolio website.</p>
+          <div id="messagesList"></div>
+        </div>
+      </div>
+
+      <!-- THUMBNAILS TAB -->
+      <div class="tab-content" id="tab-thumbnails">
+        <div class="section">
+          <h2>Upload Thumbnail</h2>
+          <div class="input-row">
+            <select id="thumbType" style="flex:1;padding:0.8rem;background:#000;border:1.5px solid #333;border-radius:12px;color:#fff;font-family:inherit;font-size:0.9rem;">
+              <option value="thumbnail_personal">Personal Thumbnail</option>
+              <option value="thumbnail_client">Client Thumbnail</option>
+            </select>
+          </div>
+          <label class="upload-area" for="thumbFile">
+            <input type="file" id="thumbFile" accept="image/*">
+            <div class="icon">📤</div>
+            <div class="text">Click to upload thumbnail</div>
+            <div class="file-name" id="thumbFileName"></div>
+            <div class="progress" id="thumbProgress" style="display:none"><div class="progress-bar"></div></div>
+          </label>
+          <button class="btn" id="uploadThumbBtn">Upload Thumbnail</button>
+        </div>
+        <div class="section">
+          <h2>Personal Thumbnails (<span id="personalCount">0</span>)</h2>
+          <div id="personalList"></div>
+        </div>
+        <div class="section">
+          <h2>Client Thumbnails (<span id="clientCount">0</span>)</h2>
+          <div id="clientList"></div>
+        </div>
+      </div>
+
+      <!-- LOGOS TAB -->
+      <div class="tab-content" id="tab-logos">
+        <div class="section">
+          <h2>Upload Logo</h2>
+          <label class="upload-area" for="logoFile">
+            <input type="file" id="logoFile" accept="image/*">
+            <div class="icon">🎨</div>
+            <div class="text">Click to upload logo</div>
+            <div class="file-name" id="logoFileName"></div>
+            <div class="progress" id="logoProgress" style="display:none"><div class="progress-bar"></div></div>
+          </label>
+          <button class="btn" id="uploadLogoBtn">Upload Logo</button>
+        </div>
+        <div class="section">
+          <h2>Logos (<span id="logoCount">0</span>)</h2>
+          <div id="logoList"></div>
+        </div>
+      </div>
+
+      <!-- BANNERS TAB -->
+      <div class="tab-content" id="tab-banners">
+        <div class="section">
+          <h2>Upload Banner</h2>
+          <label class="upload-area" for="bannerFile">
+            <input type="file" id="bannerFile" accept="image/*">
+            <div class="icon">📢</div>
+            <div class="text">Click to upload banner</div>
+            <div class="file-name" id="bannerFileName"></div>
+            <div class="progress" id="bannerProgress" style="display:none"><div class="progress-bar"></div></div>
+          </label>
+          <button class="btn" id="uploadBannerBtn">Upload Banner</button>
+        </div>
+        <div class="section">
+          <h2>Banners (<span id="bannerCount">0</span>)</h2>
+          <div id="bannerList"></div>
+        </div>
+      </div>
+
+      <!-- WEBSITES TAB -->
+      <div class="tab-content" id="tab-websites">
+        <div class="section">
+          <h2>Add Website Project</h2>
+          <div class="input-row">
+            <input type="text" id="newWebTitle" placeholder="Project Title *">
+          </div>
+          <div class="input-row">
+            <input type="text" id="newWebUrl" placeholder="Display URL">
+          </div>
+          <div class="input-row">
+            <input type="text" id="newWebLink" placeholder="Full Link (https://...) *">
+          </div>
+          <label class="upload-area" for="webPreviewFile">
+            <input type="file" id="webPreviewFile" accept="image/*">
+            <div class="icon">🖼</div>
+            <div class="text">Click to upload preview image (optional)</div>
+            <div class="file-name" id="webPreviewFileName"></div>
+          </label>
+          <button class="btn" id="addWebsiteBtn">Add Website</button>
+        </div>
+        <div class="section">
+          <h2>Websites (<span id="websiteCount">0</span>)</h2>
+          <div id="websiteList"></div>
+        </div>
+      </div>
+
+      <!-- CONTACTS TAB -->
+      <div class="tab-content" id="tab-contacts">
+        <div class="section">
+          <h2>Add Contact Method</h2>
+          <div class="input-row">
+            <input type="text" id="newContactLabel" placeholder="Label (e.g. DISCORD) *">
+          </div>
+          <div class="input-row">
+            <input type="text" id="newContactDetail" placeholder="Detail (e.g. Join community)">
+          </div>
+          <div class="input-row">
+            <input type="text" id="newContactHref" placeholder="Link (https://... or mailto:...) *">
+          </div>
+          <label class="upload-area" for="contactIconFile">
+            <input type="file" id="contactIconFile" accept="image/*">
+            <div class="icon">📞</div>
+            <div class="text">Click to upload icon (optional)</div>
+            <div class="file-name" id="contactIconFileName"></div>
+          </label>
+          <button class="btn" id="addContactBtn">Add Contact</button>
+        </div>
+        <div class="section">
+          <h2>Contact Methods (<span id="contactCount">0</span>)</h2>
+          <div id="contactList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://fpkmgjgjpsfghtcklmad.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_bDQH51RJC4TXsVI83S93PA_F407dvfL';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const BUCKET = 'portfolio-images';
+
+    let currentUser = null;
+    let allData = { items: [], websites: [], contacts: [], messages: [], analytics: [] };
+
+    // ============ TOAST ============
+    const toast = document.getElementById('toast');
+    function showToast(msg, isError) {
+      toast.textContent = msg;
+      toast.className = 'toast show' + (isError ? ' error' : '');
+      setTimeout(() => toast.className = 'toast', 2500);
+    }
+
+    // ============ AUTH ============
+    const loginWrap = document.getElementById('loginWrap');
+    const dashboard = document.getElementById('dashboard');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      btn.disabled = true; btn.textContent = 'Signing in...';
+      loginError.classList.remove('show');
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      btn.disabled = false; btn.textContent = 'Sign In';
+
+      if (error) {
+        loginError.textContent = '❌ ' + error.message;
+        loginError.classList.add('show');
+        return;
+      }
+      currentUser = data.user;
+      showDashboard();
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      currentUser = null;
+      dashboard.classList.remove('show');
+      loginWrap.style.display = 'flex';
+      loginForm.reset();
+    });
+
+    // ============ INIT AUTH STATE ============
+    (async function init() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        currentUser = session.user;
+        showDashboard();
+      }
+    })();
+
+    function showDashboard() {
+      loginWrap.style.display = 'none';
+      dashboard.classList.add('show');
+      loadAll();
+    }
+
+    // ============ LOAD DATA ============
+    async function loadAll() {
+      const [items, websites, contacts, messages, analytics] = await Promise.all([
+        supabase.from('portfolio_items').select('*').order('sort_order').order('created_at'),
+        supabase.from('website_projects').select('*').order('created_at'),
+        supabase.from('contact_methods').select('*').order('sort_order'),
+        supabase.from('messages').select('*').order('created_at', { ascending: false }),
+        supabase.from('page_analytics').select('*').order('created_at', { ascending: false }).limit(1000)
+      ]);
+      allData.items = items.data || [];
+      allData.websites = websites.data || [];
+      allData.contacts = contacts.data || [];
+      allData.messages = messages.data || [];
+      allData.analytics = analytics.data || [];
+      renderAll();
+    }
+
+    // ============ RENDER ============
+    function renderAll() {
+      renderStats();
+      renderAnalytics();
+      renderMessages();
+      renderItems('personalList', 'thumbnail_personal', 'personalCount');
+      renderItems('clientList', 'thumbnail_client', 'clientCount');
+      renderItems('logoList', 'logo', 'logoCount');
+      renderItems('bannerList', 'banner', 'bannerCount');
+      renderWebsites();
+      renderContacts();
+    }
+
+    function renderStats() {
+      const totalViews = allData.analytics.filter(a => a.event_type === 'page_view').length;
+      const totalImgs = allData.items.length;
+      const unreadMsgs = allData.messages.filter(m => !m.is_read).length;
+      const totalMsgs = allData.messages.length;
+
+      document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card"><div class="label">Page Views</div><div class="value">${totalViews}</div><div class="sub">Total visits</div></div>
+        <div class="stat-card"><div class="label">Portfolio Items</div><div class="value">${totalImgs}</div><div class="sub">Uploaded files</div></div>
+        <div class="stat-card ${unreadMsgs ? 'unread' : ''}"><div class="label">Unread Messages</div><div class="value">${unreadMsgs}</div><div class="sub">${totalMsgs} total</div></div>
+        <div class="stat-card"><div class="label">Websites</div><div class="value">${allData.websites.length}</div><div class="sub">Live projects</div></div>
+      `;
+
+      const badge = document.getElementById('msgBadge');
+      if (unreadMsgs > 0) { badge.textContent = unreadMsgs; badge.style.display = 'inline-block'; }
+      else badge.style.display = 'none';
+    }
+
+    function renderAnalytics() {
+      // Daily
+      const daily = {};
+      const last14 = [];
+      for (let i = 13; i >= 0; i--) {
+        const d = new Date(); d.setDate(d.getDate() - i);
+        const key = d.toISOString().split('T')[0];
+        last14.push(key); daily[key] = 0;
+      }
+      allData.analytics.forEach(a => {
+        const key = a.created_at.split('T')[0];
+        if (daily[key] !== undefined) daily[key]++;
+      });
+      const maxVal = Math.max(1, ...Object.values(daily));
+      document.getElementById('dailyChart').innerHTML = last14.map(k => `
+        <div class="bar" style="height:${(daily[k]/maxVal)*100}%" data-value="${daily[k]}"></div>
+      `).join('');
+      document.getElementById('dailyLabels').innerHTML = last14.map(k => `<span>${k.slice(5)}</span>`).join('');
+
+      // Page breakdown
+      const pv = {};
+      allData.analytics.filter(a => a.event_type === 'page_view').forEach(a => {
+        pv[a.page] = (pv[a.page] || 0) + 1;
+      });
+      const pvSorted = Object.entries(pv).sort((x,y) => y[1] - x[1]);
+      document.getElementById('pageViewsList').innerHTML = pvSorted.length
+        ? pvSorted.map(([k,v]) => `<div class="analytics-row"><span class="key">${k}</span><span class="val">${v} views</span></div>`).join('')
+        : '<div class="empty-state">No page views yet.</div>';
+
+      // Image clicks
+      const ic = {};
+      allData.analytics.filter(a => a.event_type === 'image_click').forEach(a => {
+        const key = (a.target || '').split('/').pop().slice(0, 40);
+        ic[key] = (ic[key] || 0) + 1;
+      });
+      const icSorted = Object.entries(ic).sort((x,y) => y[1] - x[1]).slice(0, 10);
+      document.getElementById('imageClicksList').innerHTML = icSorted.length
+        ? icSorted.map(([k,v]) => `<div class="analytics-row"><span class="key">${k}</span><span class="val">${v}</span></div>`).join('')
+        : '<div class="empty-state">No image clicks yet.</div>';
+
+      // Extra
+      const lastEvent = allData.analytics[0];
+      document.getElementById('extraInfo').innerHTML = `
+        <div class="analytics-row"><span class="key">Total Events Tracked</span><span class="val">${allData.analytics.length}</span></div>
+        <div class="analytics-row"><span class="key">Last Activity</span><span class="val">${lastEvent ? new Date(lastEvent.created_at).toLocaleString() : 'Never'}</span></div>
+        <div class="analytics-row"><span class="key">Database</span><span class="val">Supabase</span></div>
+      `;
+    }
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      }[c]));
+    }
+
+    function renderItems(containerId, type, countId) {
+      const filtered = allData.items.filter(i => i.type === type);
+      const el = document.getElementById(containerId);
+      const countEl = document.getElementById(countId);
+      if (countEl) countEl.textContent = filtered.length;
+      if (!filtered.length) {
+        el.innerHTML = '<div class="empty-state">No items yet. Upload one above ↑</div>';
+        return;
+      }
+      el.innerHTML = filtered.map((item, i) => `
+        <div class="list-item">
+          <img src="${escapeHtml(item.image_url)}" alt="" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23333%22 width=%2260%22 height=%2260%22/></svg>'">
+          <div class="info">
+            <div class="name">${escapeHtml(item.image_url.split('/').pop())}</div>
+            <div class="meta">Position ${i+1}</div>
+          </div>
+          <div class="actions">
+            <button class="icon-btn" onclick="moveItem(${item.id}, -1)" title="Move up">↑</button>
+            <button class="icon-btn" onclick="moveItem(${item.id}, 1)" title="Move down">↓</button>
+            <button class="icon-btn delete" onclick="deleteItem(${item.id})" title="Delete">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderWebsites() {
+      const el = document.getElementById('websiteList');
+      document.getElementById('websiteCount').textContent = allData.websites.length;
+      if (!allData.websites.length) {
+        el.innerHTML = '<div class="empty-state">No websites yet.</div>';
+        return;
+      }
+      el.innerHTML = allData.websites.map(w => `
+        <div class="list-item">
+          ${w.preview_url ? `<img src="${escapeHtml(w.preview_url)}" alt="" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23333%22 width=%2260%22 height=%2260%22/></svg>'">` : ''}
+          <div class="info">
+            <div class="name">${escapeHtml(w.title)}</div>
+            <div class="meta">${escapeHtml(w.link)}</div>
+          </div>
+          <div class="actions">
+            <button class="icon-btn delete" onclick="deleteWebsite(${w.id})" title="Delete">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderContacts() {
+      const el = document.getElementById('contactList');
+      document.getElementById('contactCount').textContent = allData.contacts.length;
+      if (!allData.contacts.length) {
+        el.innerHTML = '<div class="empty-state">No contact methods yet.</div>';
+        return;
+      }
+      el.innerHTML = allData.contacts.map(c => `
+        <div class="list-item">
+          ${c.icon_url ? `<img src="${escapeHtml(c.icon_url)}" alt="" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2260%22 height=%2260%22><rect fill=%22%23333%22 width=%2260%22 height=%2260%22/></svg>'">` : ''}
+          <div class="info">
+            <div class="name">${escapeHtml(c.label)}</div>
+            <div class="meta">${escapeHtml(c.detail || '')} — ${escapeHtml(c.href)}</div>
+          </div>
+          <div class="actions">
+            <button class="icon-btn delete" onclick="deleteContact(${c.id})" title="Delete">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderMessages() {
+      const el = document.getElementById('messagesList');
+      if (!allData.messages.length) {
+        el.innerHTML = '<div class="empty-state">No messages yet.</div>';
+        return;
+      }
+      el.innerHTML = allData.messages.map(m => `
+        <div class="msg-item ${m.is_read ? '' : 'unread'}">
+          <div class="msg-head">
+            <div>
+              <div class="msg-name">${escapeHtml(m.name)}</div>
+              <div class="msg-email">${escapeHtml(m.email)}</div>
+            </div>
+            <div class="msg-date">${new Date(m.created_at).toLocaleString()}</div>
+          </div>
+          <div class="msg-body">${escapeHtml(m.message)}</div>
+          <div class="msg-actions">
+            <a href="mailto:${escapeHtml(m.email)}?subject=Re: Your message">Reply</a>
+            ${!m.is_read ? `<button onclick="markRead(${m.id})">Mark as Read</button>` : ''}
+            <button class="del" onclick="deleteMessage(${m.id})">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ============ UPLOAD ============
+    async function uploadFile(file, type) {
+      const ext = file.name.split('.').pop();
+      const path = `${type}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { data, error } = await supabase.storage.from(BUCKET).upload(path, file, {
+        cacheControl: '3600', upsert: false
+      });
+      if (error) throw error;
+      const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
+      return urlData.publicUrl;
+    }
+
+    function setProgress(id, pct) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.style.display = pct > 0 && pct < 100 ? 'block' : 'none';
+      el.querySelector('.progress-bar').style.width = pct + '%';
+    }
+
+    // THUMBNAIL
+    document.getElementById('thumbFile').addEventListener('change', (e) => {
+      const f = e.target.files[0];
+      document.getElementById('thumbFileName').textContent = f ? f.name : '';
+    });
+    document.getElementById('uploadThumbBtn').addEventListener('click', async () => {
+      const file = document.getElementById('thumbFile').files[0];
+      const type = document.getElementById('thumbType').value;
+      if (!file) return showToast('Please choose a file', true);
+      const btn = document.getElementById('uploadThumbBtn');
+      btn.disabled = true; btn.textContent = 'Uploading...';
+      try {
+        setProgress('thumbProgress', 30);
+        const url = await uploadFile(file, type);
+        setProgress('thumbProgress', 70);
+        const { error } = await supabase.from('portfolio_items').insert({ type, image_url: url, sort_order: allData.items.length });
+        if (error) throw error;
+        setProgress('thumbProgress', 100);
+        showToast('✅ Thumbnail uploaded!');
+        document.getElementById('thumbFile').value = '';
+        document.getElementById('thumbFileName').textContent = '';
+        await loadAll();
+      } catch (err) {
+        showToast('❌ ' + err.message, true);
+      }
+      setProgress('thumbProgress', 0);
+      btn.disabled = false; btn.textContent = 'Upload Thumbnail';
+    });
+
+    // LOGO
+    document.getElementById('logoFile').addEventListener('change', (e) => {
+      const f = e.target.files[0];
+      document.getElementById('logoFileName').textContent = f ? f.name : '';
+    });
+    document.getElementById('uploadLogoBtn').addEventListener('click', async () => {
+      const file = document.getElementById('logoFile').files[0];
+      if (!file) return showToast('Please choose a file', true);
+      const btn = document.getElementById('uploadLogoBtn');
+      btn.disabled = true; btn.textContent = 'Uploading...';
+      try {
+        setProgress('logoProgress', 30);
+        const url = await uploadFile(file, 'logo');
+        setProgress('logoProgress', 70);
+        const { error } = await supabase.from('portfolio_items').insert({ type: 'logo', image_url: url, sort_order: allData.items.length });
+        if (error) throw error;
+        setProgress('logoProgress', 100);
+        showToast('✅ Logo uploaded!');
+        document.getElementById('logoFile').value = '';
+        document.getElementById('logoFileName').textContent = '';
+        await loadAll();
+      } catch (err) { showToast('❌ ' + err.message, true); }
+      setProgress('logoProgress', 0);
+      btn.disabled = false; btn.textContent = 'Upload Logo';
+    });
+
+    // BANNER
+    document.getElementById('bannerFile').addEventListener('change', (e) => {
+      const f = e.target.files[0];
+      document.getElementById('bannerFileName').textContent = f ? f.name : '';
+    });
+    document.getElementById('uploadBannerBtn').addEventListener('click', async () => {
+      const file = document.getElementById('bannerFile').files[0];
+      if (!file) return showToast('Please choose a file', true);
+      const btn = document.getElementById('uploadBannerBtn');
+      btn.disabled = true; btn.textContent = 'Uploading...';
+      try {
+        setProgress('bannerProgress', 30);
+        const url = await uploadFile(file, 'banner');
+        setProgress('bannerProgress', 70);
+        const { error } = await supabase.from('portfolio_items').insert({ type: 'banner', image_url: url, sort_order: allData.items.length });
+        if (error) throw error;
+        setProgress('bannerProgress', 100);
+        showToast('✅ Banner uploaded!');
+        document.getElementById('bannerFile').value = '';
+        document.getElementById('bannerFileName').textContent = '';
+        await loadAll();
+      } catch (err) { showToast('❌ ' + err.message, true); }
+      setProgress('bannerProgress', 0);
+      btn.disabled = false; btn.textContent = 'Upload Banner';
+    });
+
+    // WEBSITE
+    document.getElementById('webPreviewFile').addEventListener('change', (e) => {
+      const f = e.target.files[0];
+      document.getElementById('webPreviewFileName').textContent = f ? f.name : '';
+    });
+    document.getElementById('addWebsiteBtn').addEventListener('click', async () => {
+      const title = document.getElementById('newWebTitle').value.trim();
+      const url = document.getElementById('newWebUrl').value.trim();
+      const link = document.getElementById('newWebLink').value.trim();
+      const file = document.getElementById('webPreviewFile').files[0];
+      if (!title || !link) return showToast('Title and Link are required', true);
+      const btn = document.getElementById('addWebsiteBtn');
+      btn.disabled = true; btn.textContent = 'Adding...';
+      try {
+        let previewUrl = null;
+        if (file) previewUrl = await uploadFile(file, 'website_preview');
+        const { error } = await supabase.from('website_projects').insert({
+          title, display_url: url || link, link, preview_url: previewUrl
+        });
+        if (error) throw error;
+        showToast('✅ Website added!');
+        ['newWebTitle','newWebUrl','newWebLink'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('webPreviewFile').value = '';
+        document.getElementById('webPreviewFileName').textContent = '';
+        await loadAll();
+      } catch (err) { showToast('❌ ' + err.message, true); }
+      btn.disabled = false; btn.textContent = 'Add Website';
+    });
+
+    // CONTACT
+    document.getElementById('contactIconFile').addEventListener('change', (e) => {
+      const f = e.target.files[0];
+      document.getElementById('contactIconFileName').textContent = f ? f.name : '';
+    });
+    document.getElementById('addContactBtn').addEventListener('click', async () => {
+      const label = document.getElementById('newContactLabel').value.trim();
+      const detail = document.getElementById('newContactDetail').value.trim();
+      const href = document.getElementById('newContactHref').value.trim();
+      const file = document.getElementById('contactIconFile').files[0];
+      if (!label || !href) return showToast('Label and Link are required', true);
+      const btn = document.getElementById('addContactBtn');
+      btn.disabled = true; btn.textContent = 'Adding...';
+      try {
+        let iconUrl = null;
+        if (file) iconUrl = await uploadFile(file, 'contact_icon');
+        const { error } = await supabase.from('contact_methods').insert({
+          label, detail, href, icon_url: iconUrl, sort_order: allData.contacts.length
+        });
+        if (error) throw error;
+        showToast('✅ Contact added!');
+        ['newContactLabel','newContactDetail','newContactHref'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('contactIconFile').value = '';
+        document.getElementById('contactIconFileName').textContent = '';
+        await loadAll();
+      } catch (err) { showToast('❌ ' + err.message, true); }
+      btn.disabled = false; btn.textContent = 'Add Contact';
+    });
+
+    // ============ DELETE / ACTIONS ============
+    window.deleteItem = async function(id) {
+      if (!confirm('Delete this item?')) return;
+      const { error } = await supabase.from('portfolio_items').delete().eq('id', id);
+      if (error) return showToast('❌ ' + error.message, true);
+      showToast('Deleted');
+      await loadAll();
+    };
+
+    window.moveItem = async function(id, dir) {
+      const item = allData.items.find(i => i.id === id);
+      if (!item) return;
+      const sameType = allData.items.filter(i => i.type === item.type).sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
+      const idx = sameType.findIndex(i => i.id === id);
+      const swapIdx = idx + dir;
+      if (swapIdx < 0 || swapIdx >= sameType.length) return;
+      const a = sameType[idx], b = sameType[swapIdx];
+      await supabase.from('portfolio_items').update({ sort_order: b.sort_order ?? swapIdx }).eq('id', a.id);
+      await supabase.from('portfolio_items').update({ sort_order: a.sort_order ?? idx }).eq('id', b.id);
+      await loadAll();
+    };
+
+    window.deleteWebsite = async function(id) {
+      if (!confirm('Delete this website?')) return;
+      await supabase.from('website_projects').delete().eq('id', id);
+      showToast('Deleted');
+      await loadAll();
+    };
+
+    window.deleteContact = async function(id) {
+      if (!confirm('Delete this contact?')) return;
+      await supabase.from('contact_methods').delete().eq('id', id);
+      showToast('Deleted');
+      await loadAll();
+    };
+
+    window.deleteMessage = async function(id) {
+      if (!confirm('Delete this message?')) return;
+      await supabase.from('messages').delete().eq('id', id);
+      showToast('Deleted');
+      await loadAll();
+    };
+
+    window.markRead = async function(id) {
+      await supabase.from('messages').update({ is_read: true }).eq('id', id);
+      await loadAll();
+    };
+
+    // ============ TABS ============
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', async () => {
+      showToast('Refreshing...');
+      await loadAll();
+      showToast('✅ Refreshed');
+    });
+  </script>
+</body>
+</html>
