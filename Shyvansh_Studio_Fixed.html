@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Shyvansh Studio</title>
+<style>
+  :root {
+    --bg:#0a0a0a; --bg-soft:#111; --fg:#fff; --muted:#8a8a8a;
+    --border:#1e1e1e; --border-strong:#2a2a2a; --radius:12px;
+    --font:'Inter',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--fg);font-family:var(--font);line-height:1.55;min-height:100vh}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  button,input,select,textarea{font:inherit;color:inherit}
+
+  .site-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 6vw;border-bottom:1px solid var(--border);
+    position:sticky;top:0;background:rgba(10,10,10,.85);
+    backdrop-filter:blur(8px);z-index:50;
+  }
+  .brand{font-weight:700;letter-spacing:3px;font-size:15px}
+  .brand span{color:var(--muted);margin-left:4px;font-weight:400}
+  .site-header nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .site-header nav a{font-size:14px;color:var(--muted)}
+  .site-header nav a:hover,.site-header nav a.active{color:#fff}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;
+    padding:10px 18px;border-radius:999px;border:1px solid var(--border-strong);
+    background:transparent;cursor:pointer;transition:.2s;font-size:14px;font-weight:500}
+  .btn.primary{background:#fff;color:#000;border-color:#fff}
+  .btn.primary:hover{opacity:.85}
+  .btn.ghost:hover{border-color:#fff}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
+
+  main{padding:0 6vw}
+  .hero{padding:12vh 0 10vh;max-width:1100px}
+  .hero h1{font-size:clamp(36px,6vw,72px);line-height:1.05;letter-spacing:-1.5px;font-weight:700}
+  .hero p{color:var(--muted);font-size:18px;margin-top:20px;max-width:640px}
+  .hero .cta{display:flex;gap:12px;margin-top:36px;flex-wrap:wrap}
+
+  section.block{padding:8vh 0;border-top:1px solid var(--border);max-width:1200px}
+  .block h2{font-size:13px;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:24px}
+  .block .title{font-size:clamp(28px,4vw,44px);font-weight:600;letter-spacing:-.5px;margin-bottom:16px}
+  .block p.lead{color:var(--muted);max-width:640px;font-size:17px}
+
+  .service-grid,.portfolio-grid{display:grid;gap:16px;margin-top:36px}
+  .service-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .portfolio-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  .service{padding:28px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-soft)}
+  .service h3{font-size:18px;margin-bottom:8px}
+  .service p{color:var(--muted);font-size:14px}
+  .p-card{aspect-ratio:4/3;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--bg-soft);position:relative}
+  .p-card img{width:100%;height:100%;object-fit:cover;transition:.4s}
+  .p-card:hover img{transform:scale(1.04)}
+  .p-card .meta{position:absolute;left:0;right:0;bottom:0;padding:14px;background:linear-gradient(transparent,rgba(0,0,0,.85))}
+  .p-card .meta strong{font-size:14px}
+  .p-card .meta span{font-size:12px;color:var(--muted);display:block}
+
+  .filters{display:flex;gap:8px;margin-top:24px;flex-wrap:wrap}
+  .filters button{padding:8px 16px;border:1px solid var(--border-strong);border-radius:999px;background:transparent;cursor:pointer;font-size:13px;color:var(--muted)}
+  .filters button.active{background:#fff;color:#000;border-color:#fff}
+
+  .auth-wrap{max-width:420px;margin:8vh auto;padding:0 24px}
+  .auth-wrap h1{font-size:32px;margin-bottom:8px}
+  .muted{color:var(--muted);font-size:14px}
+  .stack{display:grid;gap:16px;margin-top:24px}
+  .stack label{display:grid;gap:6px;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+  .stack input,.stack select,.stack textarea{background:var(--bg-soft);border:1px solid var(--border-strong);border-radius:8px;padding:12px 14px;color:#fff;font-size:15px}
+  .error{color:#ff6464;font-size:14px}
+  .notice{color:#6ee7a4;font-size:14px;padding:12px;background:#0d1f16;border-radius:8px;border:1px solid #1d3a2b}
+
+  .dash-grid{display:grid;gap:20px;padding:32px 0 80px;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .card{background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius);padding:24px}
+  .card h3{font-size:14px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:16px}
+  .card.full{grid-column:1/-1}
+  .profile-card{display:flex;align-items:center;gap:16px}
+  .profile-card h2{font-size:22px}
+  .avatar{width:56px;height:56px;border-radius:50%;border:1px solid var(--border-strong);display:grid;place-items:center;font-weight:700;background-size:cover;background-position:center}
+  .kpi-row{display:flex;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+  .kpi{flex:1;min-width:100px;padding:14px;border-radius:8px;border:1px solid var(--border)}
+  .kpi span{display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted)}
+  .kpi strong{font-size:20px}
+  .thumb-list{display:grid;gap:10px}
+  .thumb-row{display:flex;gap:14px;align-items:center}
+  .thumb-row img{width:72px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--border)}
+  .row-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .history-list{display:grid;gap:10px}
+  .history-row{display:flex;justify-content:space-between;align-items:center;padding:14px;border:1px solid var(--border);border-radius:8px}
+  .announce{padding:12px 0;border-bottom:1px solid var(--border)}
+  .announce:last-child{border-bottom:none}
+  .announce h4{font-size:15px;margin-bottom:4px}
+  .announce p{font-size:14px;color:var(--muted)}
+
+  .table-wrap{width:100%;overflow-x:auto}
+  input[type=file]{max-width:100%}
+  table.data{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+  table.data th,table.data td{padding:10px;border-bottom:1px solid var(--border);text-align:left}
+  table.data th{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+  table.data td.r,table.data th.r{text-align:right}
+
+  .admin-tabs{display:flex;gap:8px;border-bottom:1px solid var(--border);margin-bottom:24px;overflow-x:auto}
+  .admin-tabs button{padding:12px 16px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);cursor:pointer;font-size:14px;white-space:nowrap}
+  .admin-tabs button.active{color:#fff;border-bottom-color:#fff}
+
+  .field-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .field-grid label{display:grid;gap:6px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+  .field-grid input,.field-grid select,.field-grid textarea{background:var(--bg);border:1px solid var(--border-strong);border-radius:8px;padding:10px 12px;color:#fff}
+
+  .verify-card{display:flex;gap:16px;padding:16px;border:1px solid var(--border);border-radius:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap}
+  .verify-card img{width:100px;height:70px;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid var(--border-strong)}
+  .verify-card .info{flex:1;min-width:200px}
+  .verify-card .info strong{display:block;font-size:15px}
+  .verify-card .info span{font-size:13px;color:var(--muted);display:block}
+
+  footer{border-top:1px solid var(--border);padding:40px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-top:40px}
+  footer small{color:var(--muted);font-size:12px;letter-spacing:1px}
+
+  [hidden]{display:none !important}
+
+  @media(max-width:760px){
+    .dash-grid{grid-template-columns:1fr}
+    .card{padding:18px}
+    .history-row{align-items:flex-start;gap:12px;flex-wrap:wrap}
+    .site-header{padding:16px 20px}
+    main{padding:0 20px}
+    .site-header nav a:not(.btn){display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="#/" class="brand">SHYVANSH<span>STUDIO</span></a>
+  <nav id="main-nav">
+    <a href="#/portfolio" data-nav="portfolio">Portfolio</a>
+    <a href="#/login" data-nav="login">Client Login</a>
+    <a href="#/admin-login" data-nav="admin-login">Admin</a>
+    <span id="auth-slot"></span>
+  </nav>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <small>© <span id="year"></span> SHYVANSH STUDIO</small>
+  <small><a href="#/admin-login">Admin Login</a></small>
+</footer>
+
+<script type="module">
+// ================================================================
+// CONFIG — EDIT THIS SECTION ONLY
+// ================================================================
+const CONFIG = {
+  SUPABASE_URL: 'https://gssjmqokrofzbhbrqupz.supabase.co',
+  SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_cw8_8r_eSed_xfEPS_dR-g_c7G3DC6w',
+  TABLES: {
+    profiles:'profiles', orders:'orders', invoices:'invoices',
+    invoiceItems:'invoice_items', payments:'payments',
+    announcements:'announcements', portfolio:'portfolio_items'
+  },
+  COLS: {
+    profile: {id:'id',fullName:'full_name',role:'role',logoUrl:'logo_url',email:'email'},
+    order:   {id:'id',clientId:'client_id',title:'title',imageUrl:'image_url',price:'price',orderDate:'order_date',billingMonth:'billing_month'},
+    invoice: {id:'id',clientId:'client_id',month:'billing_month',total:'total_amount',paid:'paid_amount',pending:'pending_amount'},
+    payment: {id:'id',clientId:'client_id',invoiceId:'invoice_id',amount:'amount',screenshotPath:'screenshot_path',txnRef:'transaction_reference',status:'status',createdAt:'created_at'},
+    announcement:{id:'id',title:'title',body:'body',createdAt:'created_at'},
+    portfolio:{id:'id',title:'title',category:'category',imageUrl:'image_url',createdAt:'created_at'}
+  },
+  BUCKETS: {
+    screenshots:'payment-screenshots', portfolio:'portfolio-images',
+    clientLogos:'client-logos', thumbnails:'order-thumbnails'
+  },
+  UPI: { VPA:'shyvansh@upi', PAYEE_NAME:'Shyvansh Studio' },
+  EDGE_FN: 'hyper-worker'
+};
+
+// ================================================================
+// SUPABASE CLIENT
+// ================================================================
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+if (!/^https:\/\/[^/]+\.supabase\.co$/.test(CONFIG.SUPABASE_URL) ||
+    !CONFIG.SUPABASE_PUBLISHABLE_KEY.startsWith('sb_publishable_')) {
+  throw new Error('Supabase configuration is incomplete. Check the project URL and publishable key in CONFIG.');
+}
+const supabase = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_PUBLISHABLE_KEY, {
+  auth: { persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
+});
+
+// ================================================================
+// UTILS
+// ================================================================
+const $  = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+const fmt = n => '₹' + Number(n||0).toLocaleString('en-IN');
+const monthKey = (d=new Date()) => d.toLocaleString('en-US',{month:'long',year:'numeric'});
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// ================================================================
+// AUTH
+// ================================================================
+async function getProfile() {
+  // A visitor who is not signed in is normal on public pages.
+  // getUser() throws AuthSessionMissingError when no session exists,
+  // so read the persisted session first and return null when absent.
+  const { data, error: authError } = await supabase.auth.getSession();
+  if (authError) throw authError;
+  const user = data?.session?.user;
+  if (!user) return null;
+
+  const result = await supabase.from(CONFIG.TABLES.profiles)
+    .select('*').eq(CONFIG.COLS.profile.id, user.id).maybeSingle();
+  if (result.error) throw result.error;
+  return result.data;
+}
+async function signIn(email,password) {
+  const { data, error } = await supabase.auth.signInWithPassword({email,password});
+  if (error) throw error;
+  return data.user;
+}
+async function signOut() { await supabase.auth.signOut(); location.hash = '#/'; }
+
+async function refreshAuthSlot() {
+  const slot = $('#auth-slot');
+  if (!slot) return;
+  slot.innerHTML = '';
+  // No session is expected for public visitors; do not block page rendering.
+  const { data, error } = await supabase.auth.getSession();
+  if (error) throw error;
+  if (!data?.session?.user) return;
+  let profile = null;
+  try { profile = await getProfile(); }
+  catch (err) { console.error('Profile lookup failed:', err); }
+  const role = profile?.[CONFIG.COLS.profile.role];
+  const target = role === 'admin' ? '#/admin' : '#/dashboard';
+  slot.innerHTML = `<a class="btn ghost" href="${target}">Dashboard</a>
+    <a class="btn ghost" id="logout-btn" href="#">Sign Out</a>`;
+  $('#logout-btn').onclick = async e => { e.preventDefault(); await signOut(); };
+}
+
+// ================================================================
+// ROUTER
+// ================================================================
+const routes = {
+  '/':              renderHome,
+  '/portfolio':     renderPortfolio,
+  '/login':         renderLogin,
+  '/admin-login':   renderAdminLogin,
+  '/dashboard':     renderClientDashboard,
+  '/admin':         renderAdminDashboard
+};
+
+async function router() {
+  const hash = location.hash.replace(/^#/, '') || '/';
+  const view = routes[hash] || renderHome;
+  $('#app').innerHTML = '<p class="muted" style="padding:40px 0">Loading…</p>';
+  try {
+    await refreshAuthSlot();
+    await view();
+  } catch (e) {
+    console.error('Page load error:', e);
+    const message = e?.message || 'An unexpected error occurred.';
+    $('#app').innerHTML = `<div class="auth-wrap"><h1>Unable to load this page</h1><p class="error">${esc(message)}</p><p class="muted" style="margin-top:12px">Check your internet connection and Supabase project configuration. If this continues, check the browser console for details.</p><button class="btn ghost" style="margin-top:18px" onclick="location.reload()">Try again</button></div>`;
+  }
+  $$('[data-nav]').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+hash));
+}
+window.addEventListener('hashchange', router);
+window.addEventListener('DOMContentLoaded', () => { $('#year').textContent = new Date().getFullYear(); router(); });
+
+// ================================================================
+// PUBLIC: HOME
+// ================================================================
+async function renderHome() {
+  $('#app').innerHTML = `
+    <section class="hero">
+      <h1>Designing Digital Experiences That Stand Out.</h1>
+      <p>Premium thumbnails, logos, and creative work for creators and brands who want to look the part.</p>
+      <div class="cta">
+        <a class="btn primary" href="#/portfolio">View Portfolio</a>
+        <a class="btn ghost" href="#/login">Client Login</a>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>About</h2>
+      <div class="title">A studio built on clarity and craft.</div>
+      <p class="lead">Shyvansh Studio is a creative practice focused on premium visual design — from Minecraft and YouTube thumbnails to logo identity systems. Every project is treated with the same standard: clean, considered, and built to convert.</p>
+    </section>
+
+    <section class="block">
+      <h2>Services</h2>
+      <div class="title">What we do.</div>
+      <div class="service-grid">
+        <div class="service"><h3>Minecraft Thumbnails</h3><p>High-impact visuals for Minecraft creators and servers.</p></div>
+        <div class="service"><h3>YouTube Thumbnails</h3><p>Click-worthy thumbnails designed around your content.</p></div>
+        <div class="service"><h3>Logo Design</h3><p>Distinct, minimal identity marks for modern brands.</p></div>
+        <div class="service"><h3>Creative Work</h3><p>Custom design tailored to specific projects and campaigns.</p></div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>Announcements</h2>
+      <div class="title">Studio updates.</div>
+      <div id="home-announcements" class="stack"><p class="muted">Loading…</p></div>
+    </section>
+
+    <section class="block">
+      <h2>Contact</h2>
+      <div class="title">Let's talk.</div>
+      <p class="lead">Business enquiries: <a style="text-decoration:underline" href="mailto:hello@shyvansh.studio">hello@shyvansh.studio</a></p>
+    </section>
+  `;
+  const { data, error } = await supabase.from(CONFIG.TABLES.announcements)
+    .select('*').order(CONFIG.COLS.announcement.createdAt,{ascending:false}).limit(5);
+  const box = $('#home-announcements');
+  if (error) { box.innerHTML = `<p class="muted">Announcements are temporarily unavailable.</p>`; console.error(error); return; }
+  if (!data?.length) { box.innerHTML = `<p class="muted">No announcements yet.</p>`; return; }
+  box.innerHTML = data.map(a=>`
+    <article class="announce">
+      <h4>${esc(a[CONFIG.COLS.announcement.title])}</h4>
+      <p>${esc(a[CONFIG.COLS.announcement.body])}</p>
+    </article>`).join('');
+}
+
+// ================================================================
+// PUBLIC: PORTFOLIO
+// ================================================================
+async function renderPortfolio() {
+  $('#app').innerHTML = `
+    <section class="block" style="border-top:none">
+      <h2>Portfolio</h2>
+      <div class="title">Selected work.</div>
+      <div class="filters" id="filters">
+        <button data-cat="all" class="active">All</button>
+        <button data-cat="Minecraft Thumbnails">Minecraft</button>
+        <button data-cat="YouTube Thumbnails">YouTube</button>
+        <button data-cat="Logo Designs">Logos</button>
+        <button data-cat="Other Creative Projects">Other</button>
+      </div>
+      <div class="portfolio-grid" id="pg"><p class="muted">Loading…</p></div>
+    </section>`;
+  const { data, error } = await supabase.from(CONFIG.TABLES.portfolio)
+    .select('*').order(CONFIG.COLS.portfolio.createdAt,{ascending:false});
+  if (error) { $('#pg').innerHTML = `<p class="error">${esc(error.message)}</p>`; return; }
+  renderPortfolioGrid(data||[], 'all');
+  $$('#filters button').forEach(b => b.onclick = () => {
+    $$('#filters button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    renderPortfolioGrid(data||[], b.dataset.cat);
+  });
+}
+function renderPortfolioGrid(items, cat) {
+  const C = CONFIG.COLS.portfolio;
+  const filtered = cat === 'all' ? items : items.filter(i => i[C.category] === cat);
+  const box = $('#pg');
+  if (!filtered.length) { box.innerHTML = `<p class="muted">No items in this category yet.</p>`; return; }
+  box.innerHTML = filtered.map(i => `
+    <div class="p-card">
+      <img src="${esc(i[C.imageUrl])}" alt="${esc(i[C.title])}" loading="lazy" />
+      <div class="meta">
+        <strong>${esc(i[C.title])}</strong>
+        <span>${esc(i[C.category]||'')}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ================================================================
+// LOGIN
+// ================================================================
+async function renderLogin() { renderLoginForm('Client Sign In','login', async () => {
+  const p = await getProfile();
+  if (!p) throw new Error('Your account is signed in, but its profile record was not found. Please contact the studio administrator.');
+  const role = p[CONFIG.COLS.profile.role];
+  location.hash = role === 'admin' ? '#/admin' : '#/dashboard';
+}); }
+async function renderAdminLogin() { renderLoginForm('Admin Sign In','admin-login', async () => {
+  const p = await getProfile();
+  if (!p || p[CONFIG.COLS.profile.role] !== 'admin') {
+    await supabase.auth.signOut();
+    throw new Error('This account does not have administrator access.');
+  }
+  location.hash = '#/admin';
+}); }
+
+function renderLoginForm(title, mode, onSuccess) {
+  $('#app').innerHTML = `
+    <div class="auth-wrap">
+      <h1>${title}</h1>
+      <p class="muted">Accounts are created by the studio only.</p>
+      <form id="lf" class="stack">
+        <label>Email<input name="email" type="email" required /></label>
+        <label>Password<input name="password" type="password" required /></label>
+        <button class="btn primary" type="submit">Sign In</button>
+        <p class="error" id="lerr" hidden></p>
+      </form>
+    </div>`;
+  $('#lf').onsubmit = async e => {
+    e.preventDefault();
+    $('#lerr').hidden = true;
+    const form = e.target;
+    const submit = form.querySelector('button[type="submit"]');
+    const fd = new FormData(form);
+    submit.disabled = true;
+    submit.textContent = 'Signing in…';
+    try {
+      await signIn(String(fd.get('email')||'').trim(), fd.get('password'));
+      await onSuccess();
+    } catch (err) {
+      $('#lerr').hidden = false;
+      $('#lerr').textContent = err.message || 'Login failed';
+    } finally {
+      if (submit.isConnected) { submit.disabled = false; submit.textContent = 'Sign In'; }
+    }
+  };
+}
+
+// ================================================================
+// CLIENT DASHBOARD
+// ================================================================
+async function renderClientDashboard() {
+  const p = await getProfile();
+  if (!p) { location.hash = '#/login'; return; }
+  if (p[CONFIG.COLS.profile.role] === 'admin') { location.hash = '#/admin'; return; }
+
+  $('#app').innerHTML = `
+    <div class="dash-grid">
+      <section class="card profile-card">
+        <div class="avatar" id="av">SS</div>
+        <div><h2>${esc(p[CONFIG.COLS.profile.fullName]||'Client')}</h2>
+        <p class="muted">${esc(p[CONFIG.COLS.profile.email]||'')}</p></div>
+      </section>
+      <section class="card">
+        <h3>Announcements</h3>
+        <div id="cd-ann" class="stack"><p class="muted">Loading…</p></div>
+      </section>
+      <section class="card">
+        <h3>Current Month — <span id="cur-m">${monthKey()}</span></h3>
+        <div class="kpi-row">
+          <div class="kpi"><span>Total</span><strong id="k-total">₹0</strong></div>
+          <div class="kpi"><span>Paid</span><strong id="k-paid">₹0</strong></div>
+          <div class="kpi"><span>Pending</span><strong id="k-pend">₹0</strong></div>
+        </div>
+        <div id="cur-items" class="thumb-list"></div>
+        <div class="row-actions">
+          <button class="btn primary" id="pay-now" disabled>Pay Now</button>
+          <button class="btn ghost" id="dl-cur" disabled>Download Invoice</button>
+        </div>
+      </section>
+      <section class="card">
+        <h3>Submit Payment Proof</h3>
+        <form id="pay-form" class="stack">
+          <label>Amount (₹)<input name="amount" type="number" min="1" required /></label>
+          <label>Transaction reference (optional)<input name="txn" type="text" /></label>
+          <label>Payment screenshot<input name="screenshot" type="file" accept="image/png,image/jpeg,image/webp" required /></label>
+          <button class="btn primary" type="submit">Upload Proof</button>
+          <p class="notice" id="pay-notice" hidden>Payment screenshot submitted successfully. Your payment will be verified by our administration team within 24 hours.</p>
+          <p class="error" id="pay-err" hidden></p>
+        </form>
+      </section>
+      <section class="card full">
+        <h3>Previous Months</h3>
+        <div id="history" class="history-list"><p class="muted">Loading…</p></div>
+      </section>
+    </div>`;
+
+  if (p[CONFIG.COLS.profile.logoUrl]) {
+    const av = $('#av'); av.style.backgroundImage = `url(${p[CONFIG.COLS.profile.logoUrl]})`; av.textContent = '';
+  } else {
+    $('#av').textContent = (p[CONFIG.COLS.profile.fullName]||'S').slice(0,2).toUpperCase();
+  }
+
+  // Announcements
+  const { data: an } = await supabase.from(CONFIG.TABLES.announcements)
+    .select('*').order(CONFIG.COLS.announcement.createdAt,{ascending:false}).limit(5);
+  $('#cd-ann').innerHTML = an?.length
+    ? an.map(a=>`<div class="announce"><h4>${esc(a[CONFIG.COLS.announcement.title])}</h4><p>${esc(a[CONFIG.COLS.announcement.body])}</p></div>`).join('')
+    : `<p class="muted">No announcements yet.</p>`;
+
+  // Invoices
+  const C = CONFIG.COLS;
+  const uid = p[C.profile.id];
+  const { data: invoices } = await supabase.from(CONFIG.TABLES.invoices)
+    .select('*').eq(C.invoice.clientId, uid).order(C.invoice.month,{ascending:false});
+  const invMap = Object.fromEntries((invoices||[]).map(i=>[i[C.invoice.month], i]));
+  const cur = monthKey(); const curInv = invMap[cur];
+
+  if (curInv) {
+    $('#k-total').textContent   = fmt(curInv[C.invoice.total]);
+    $('#k-paid').textContent    = fmt(curInv[C.invoice.paid]);
+    $('#k-pend').textContent    = fmt(curInv[C.invoice.pending]);
+    const pending = Number(curInv[C.invoice.pending]||0);
+    const payBtn = $('#pay-now'), dlBtn = $('#dl-cur');
+    payBtn.disabled = pending <= 0;
+    payBtn.onclick = () => openUpi(pending);
+    dlBtn.disabled = false;
+    dlBtn.onclick = () => downloadInvoice(curInv.id, invoices, p);
+
+    const { data: items } = await supabase.from(CONFIG.TABLES.orders)
+      .select('*').eq(C.order.clientId, uid).eq(C.order.billingMonth, cur)
+      .order(C.order.orderDate,{ascending:false});
+    $('#cur-items').innerHTML = items?.length
+      ? items.map(o=>`<div class="thumb-row">
+          <img src="${esc(o[C.order.imageUrl])}" alt="" loading="lazy" />
+          <div><strong>${esc(o[C.order.title])}</strong>
+          <span class="muted">${esc(o[C.order.orderDate])} · ${fmt(o[C.order.price])}</span></div>
+        </div>`).join('')
+      : `<p class="muted">No orders this month.</p>`;
+  } else {
+    $('#cur-items').innerHTML = `<p class="muted">No orders this month yet.</p>`;
+  }
+
+  // History
+  const hist = (invoices||[]).filter(i=>i[C.invoice.month] !== cur);
+  $('#history').innerHTML = hist.length
+    ? hist.map(inv=>`
+      <div class="history-row">
+        <div><strong>${esc(inv[C.invoice.month])}</strong>
+          <span class="muted">Total ${fmt(inv[C.invoice.total])} ·
+          Paid ${fmt(inv[C.invoice.paid])} ·
+          Pending ${fmt(inv[C.invoice.pending])}</span></div>
+        <button class="btn ghost" data-dl="${inv.id}">Download</button>
+      </div>`).join('')
+    : `<p class="muted">No previous invoices.</p>`;
+  $$('#history [data-dl]').forEach(b => b.onclick = () => {
+    const inv = invoices.find(i => i.id === b.dataset.dl);
+    if (inv) downloadInvoice(inv.id, invoices, p);
+  });
+
+  // Payment form
+  $('#pay-form').onsubmit = async e => {
+    e.preventDefault();
+    const errEl = $('#pay-err'), notice = $('#pay-notice');
+    errEl.hidden = true; notice.hidden = true;
+    const fd = new FormData(e.target);
+    const file = fd.get('screenshot');
+    if (!file || file.size === 0) return;
+    if (file.size > 5*1024*1024) { errEl.hidden=false; errEl.textContent='Max size 5 MB.'; return; }
+    if (!['image/png','image/jpeg','image/webp'].includes(file.type)) {
+      errEl.hidden=false; errEl.textContent='Only PNG/JPEG/WebP.'; return;
+    }
+    const inv = invMap[cur];
+    if (!inv) { errEl.hidden=false; errEl.textContent='No invoice for this month.'; return; }
+    const path = `${uid}/${cur.replace(/\s+/g,'-')}-${Date.now()}-${file.name}`;
+    const up = await supabase.storage.from(CONFIG.BUCKETS.screenshots).upload(path, file, {contentType:file.type, upsert:false});
+    if (up.error) { errEl.hidden=false; errEl.textContent=up.error.message; return; }
+    const ins = await supabase.from(CONFIG.TABLES.payments).insert({
+      [C.payment.clientId]: uid,
+      [C.payment.invoiceId]: inv.id,
+      [C.payment.amount]: Number(fd.get('amount')),
+      [C.payment.screenshotPath]: path,
+      [C.payment.txnRef]: fd.get('txn')||null,
+      [C.payment.status]: 'pending'
+    });
+    if (ins.error) {
+      await supabase.storage.from(CONFIG.BUCKETS.screenshots).remove([path]);
+      errEl.hidden=false; errEl.textContent=ins.error.message; return;
+    }
+    e.target.reset(); notice.hidden = false;
+  };
+}
+
+function openUpi(amount) {
+  const q = new URLSearchParams({
+    pa: CONFIG.UPI.VPA, pn: CONFIG.UPI.PAYEE_NAME, am:String(amount), cu:'INR', tn:`Invoice ${monthKey()}`
+  });
+  location.href = `upi://pay?${q}`;
+}
+
+// ================================================================
+// PDF
+// ================================================================
+async function ensureH2P() {
+  if (window.html2pdf) return;
+  await new Promise((res,rej)=>{
+    const s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js';
+    s.onload = res; s.onerror = rej; document.head.appendChild(s);
+  });
+}
+async function downloadInvoice(invoiceId, invoices, profile) {
+  await ensureH2P();
+  const C = CONFIG.COLS;
+  const inv = invoices.find(i => i.id === invoiceId);
+  if (!inv) return;
+  const { data: items } = await supabase.from(CONFIG.TABLES.orders)
+    .select('*').eq(C.order.clientId, profile[C.profile.id])
+    .eq(C.order.billingMonth, inv[C.invoice.month])
+    .order(C.order.orderDate,{ascending:true});
+  const rows = (items||[]).map(o=>`<tr>
+    <td>${esc(o[C.order.title])}</td><td>${esc(o[C.order.orderDate])}</td>
+    <td style="text-align:right">${fmt(o[C.order.price])}</td></tr>`).join('');
+  const html = `
+    <div style="font-family:Inter,system-ui,sans-serif;color:#111;padding:48px;width:750px">
+      <h1 style="margin:0;font-size:26px;letter-spacing:2px">SHYVANSH STUDIO</h1>
+      <p style="margin:4px 0 28px;color:#666">Billing Invoice</p>
+      <table style="width:100%;margin-bottom:20px;font-size:14px">
+        <tr><td><strong>Client</strong></td><td>${esc(profile[C.profile.fullName])}</td></tr>
+        <tr><td><strong>Month</strong></td><td>${esc(inv[C.invoice.month])}</td></tr>
+        <tr><td><strong>Invoice ID</strong></td><td>${inv.id}</td></tr>
+      </table>
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <thead><tr style="border-bottom:1px solid #ccc;text-align:left">
+          <th style="padding:8px 0">Item</th><th>Date</th><th style="text-align:right">Price</th>
+        </tr></thead><tbody>${rows||`<tr><td colspan="3" style="padding:16px;color:#888">No items</td></tr>`}</tbody>
+      </table>
+      <hr style="margin:22px 0;border:none;border-top:1px solid #ccc"/>
+      <table style="width:100%;font-size:15px">
+        <tr><td>Total</td><td style="text-align:right">${fmt(inv[C.invoice.total])}</td></tr>
+        <tr><td>Paid</td><td style="text-align:right">${fmt(inv[C.invoice.paid])}</td></tr>
+        <tr><td><strong>Pending</strong></td><td style="text-align:right"><strong>${fmt(inv[C.invoice.pending])}</strong></td></tr>
+      </table>
+      <p style="margin-top:28px;font-size:12px;color:#888">Generated from verified records only.</p>
+    </div>`;
+  const container = document.createElement('div');
+  container.innerHTML = html;
+  document.body.appendChild(container);
+  await window.html2pdf().set({
+    margin:0, filename:`Shyvansh-Invoice-${inv[C.invoice.month].replace(/\s+/g,'-')}.pdf`,
+    image:{type:'jpeg',quality:.98}, html2canvas:{scale:2,backgroundColor:'#fff'},
+    jsPDF:{unit:'pt',format:'a4',orientation:'portrait'}
+  }).from(container.firstElementChild).save();
+  container.remove();
+}
+
+// ================================================================
+// ADMIN DASHBOARD
+// ================================================================
+async function renderAdminDashboard() {
+  const p = await getProfile();
+  if (!p || p[CONFIG.COLS.profile.role] !== 'admin') { location.hash = '#/admin-login'; return; }
+  const C = CONFIG.COLS;
+
+  $('#app').innerHTML = `
+    <div style="padding:32px 0">
+      <h1 style="font-size:28px;letter-spacing:-.5px">Admin Panel</h1>
+      <p class="muted">Signed in as ${esc(p[C.profile.fullName])}</p>
+    </div>
+    <div class="admin-tabs">
+      <button data-tab="overview" class="active">Overview</button>
+      <button data-tab="clients">Clients</button>
+      <button data-tab="orders">Orders</button>
+      <button data-tab="payments">Payments</button>
+      <button data-tab="announcements">Announcements</button>
+      <button data-tab="portfolio">Portfolio</button>
+    </div>
+    <div id="admin-body" style="padding-bottom:80px"></div>`;
+
+  $$('.admin-tabs button').forEach(b => b.onclick = () => {
+    $$('.admin-tabs button').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    ({overview:adminOverview, clients:adminClients, orders:adminOrders,
+      payments:adminPayments, announcements:adminAnnouncements,
+      portfolio:adminPortfolio})[b.dataset.tab]();
+  });
+  adminOverview();
+}
+
+async function adminOverview() {
+  const C = CONFIG.COLS;
+  const [clients,orders,invoices,payments] = await Promise.all([
+    supabase.from(CONFIG.TABLES.profiles).select('*').eq(C.profile.role,'client'),
+    supabase.from(CONFIG.TABLES.orders).select('*'),
+    supabase.from(CONFIG.TABLES.invoices).select('*'),
+    supabase.from(CONFIG.TABLES.payments).select('*').eq(C.payment.status,'pending')
+  ]);
+  const cur = monthKey();
+  const curRev = (invoices.data||[]).filter(i=>i[C.invoice.month]===cur)
+    .reduce((s,i)=>s+Number(i[C.invoice.total]||0),0);
+  $('#admin-body').innerHTML = `
+    <div class="kpi-row">
+      <div class="kpi"><span>Total clients</span><strong>${clients.data?.length||0}</strong></div>
+      <div class="kpi"><span>Total orders</span><strong>${orders.data?.length||0}</strong></div>
+      <div class="kpi"><span>This month revenue</span><strong>${fmt(curRev)}</strong></div>
+      <div class="kpi"><span>Pending payments</span><strong>${payments.data?.length||0}</strong></div>
+    </div>`;
+}
+
+async function adminClients() {
+  const C = CONFIG.COLS;
+  const { data, error } = await supabase.from(CONFIG.TABLES.profiles)
+    .select('*').eq(C.profile.role,'client').order(C.profile.fullName);
+  const list = (data||[]).map(c=>`
+    <tr><td>${esc(c[C.profile.fullName])}</td>
+      <td>${esc(c[C.profile.email])}</td>
+      <td>${c[C.profile.id].slice(0,8)}…</td></tr>`).join('');
+  $('#admin-body').innerHTML = `
+    <div class="card">
+      <h3>Create Client</h3>
+      <form id="cl-form" class="field-grid">
+        <label>Full name<input name="full_name" required /></label>
+        <label>Email<input name="email" type="email" required /></label>
+        <label>Temporary password<input name="password" type="text" required minlength="8" /></label>
+        <div style="align-self:end"><button class="btn primary" type="submit">Create</button></div>
+        <p class="error" id="cl-err" hidden style="grid-column:1/-1"></p>
+        <p class="notice" id="cl-ok" hidden style="grid-column:1/-1">Client created.</p>
+      </form>
+    </div>
+    <div class="card" style="margin-top:20px">
+      <h3>Clients</h3>
+      ${error?`<p class="error">${esc(error.message)}</p>`:''}
+      <table class="data"><thead><tr><th>Name</th><th>Email</th><th>ID</th></tr></thead>
+        <tbody>${list||`<tr><td colspan="3" class="muted">No clients yet</td></tr>`}</tbody></table>
+    </div>`;
+
+  $('#cl-form').onsubmit = async e => {
+    e.preventDefault();
+    $('#cl-err').hidden = true; $('#cl-ok').hidden = true;
+    const fd = new FormData(e.target);
+    const { data:{ session } } = await supabase.auth.getSession();
+    if (!session) { $('#cl-err').hidden=false; $('#cl-err').textContent='No session.'; return; }
+    let res;
+    try {
+      res = await fetch(`${CONFIG.SUPABASE_URL}/functions/v1/${CONFIG.EDGE_FN}`, {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json', Authorization:`Bearer ${session.access_token}` },
+        body: JSON.stringify({
+          full_name: fd.get('full_name'), email: fd.get('email'), password: fd.get('password')
+        })
+      });
+    } catch (networkError) {
+      $('#cl-err').hidden=false;
+      $('#cl-err').textContent='Could not reach the client-creation function. Check the function deployment and network connection.';
+      console.error(networkError);
+      return;
+    }
+    const body = await res.json().catch(()=>({}));
+    if (!res.ok) {
+      $('#cl-err').hidden=false;
+      $('#cl-err').textContent = body?.error || body?.message || `Failed (${res.status})`;
+      return;
+    }
+    $('#cl-ok').hidden = false;
+    e.target.reset();
+    setTimeout(adminClients, 800);
+  };
+}
+
+async function adminOrders() {
+  const C = CONFIG.COLS;
+  const [clients, orders] = await Promise.all([
+    supabase.from(CONFIG.TABLES.profiles).select('*').eq(C.profile.role,'client'),
+    supabase.from(CONFIG.TABLES.orders).select('*').order(C.order.orderDate,{ascending:false}).limit(50)
+  ]);
+  const clientMap = Object.fromEntries((clients.data||[]).map(c=>[c[C.profile.id], c]));
+  const rows = (orders.data||[]).map(o=>`
+    <tr>
+      <td>${esc(o[C.order.title])}</td>
+      <td>${esc(clientMap[o[C.order.clientId]]?.[C.profile.fullName]||'—')}</td>
+      <td>${esc(o[C.order.orderDate])}</td>
+      <td class="r">${fmt(o[C.order.price])}</td>
+      <td>${esc(o[C.order.billingMonth])}</td>
+    </tr>`).join('');
+  $('#admin-body').innerHTML = `
+    <div class="card">
+      <h3>Add Order</h3>
+      <form id="ord-form" class="field-grid">
+        <label>Client<select name="client_id" required>
+          <option value="">Select…</option>
+          ${(clients.data||[]).map(c=>`<option value="${c[C.profile.id]}">${esc(c[C.profile.fullName])}</option>`).join('')}
+        </select></label>
+        <label>Order date<input name="order_date" type="date" required /></label>
+        <label>Title<input name="title" required /></label>
+        <label>Price (₹)<input name="price" type="number" min="0" required /></label>
+        <label style="grid-column:1/-1">Thumbnail<input name="image" type="file" accept="image/*" required /></label>
+        <div style="grid-column:1/-1"><button class="btn primary" type="submit">Save Order</button></div>
+        <p class="error" id="ord-err" hidden style="grid-column:1/-1"></p>
+      </form>
+    </div>
+    <div class="card" style="margin-top:20px">
+      <h3>Recent Orders</h3>
+      <table class="data">
+        <thead><tr><th>Title</th><th>Client</th><th>Date</th><th class="r">Price</th><th>Month</th></tr></thead>
+        <tbody>${rows||`<tr><td colspan="5" class="muted">No orders</td></tr>`}</tbody>
+      </table>
+    </div>`;
+
+  $('#ord-form').onsubmit = async e => {
+    e.preventDefault();
+    $('#ord-err').hidden = true;
+    const fd = new FormData(e.target);
+    const clientId = fd.get('client_id');
+    const date = fd.get('order_date');
+    const [year, monthNum, day] = date.split('-').map(Number);
+    const month = new Date(year, monthNum - 1, day).toLocaleString('en-US',{month:'long',year:'numeric'});
+    const file = fd.get('image');
+    if (!file || file.size === 0) { $('#ord-err').hidden=false; $('#ord-err').textContent='Image required.'; return; }
+    const path = `${clientId}/${Date.now()}-${file.name}`;
+    const up = await supabase.storage.from(CONFIG.BUCKETS.thumbnails).upload(path, file, {contentType:file.type});
+    if (up.error) { $('#ord-err').hidden=false; $('#ord-err').textContent=up.error.message; return; }
+    const { data: pub } = supabase.storage.from(CONFIG.BUCKETS.thumbnails).getPublicUrl(path);
+    const ins = await supabase.from(CONFIG.TABLES.orders).insert({
+      [C.order.clientId]: clientId,
+      [C.order.title]: fd.get('title'),
+      [C.order.imageUrl]: pub.publicUrl,
+      [C.order.price]: Number(fd.get('price')),
+      [C.order.orderDate]: date,
+      [C.order.billingMonth]: month
+    });
+    if (ins.error) { $('#ord-err').hidden=false; $('#ord-err').textContent=ins.error.message; return; }
+    adminOrders();
+  };
+}
+
+async function adminPayments() {
+  const C = CONFIG.COLS;
+  const [pays, clients, invs] = await Promise.all([
+    supabase.from(CONFIG.TABLES.payments).select('*').eq(C.payment.status,'pending').order(C.payment.createdAt,{ascending:false}).limit(50),
+    supabase.from(CONFIG.TABLES.profiles).select('*'),
+    supabase.from(CONFIG.TABLES.invoices).select('*')
+  ]);
+  const pMap = Object.fromEntries((clients.data||[]).map(c=>[c[C.profile.id], c]));
+  const iMap = Object.fromEntries((invs.data||[]).map(i=>[i.id, i]));
+
+  const cards = await Promise.all((pays.data||[]).map(async pay => {
+    const { data: signed } = await supabase.storage
+      .from(CONFIG.BUCKETS.screenshots)
+      .createSignedUrl(pay[C.payment.screenshotPath], 600);
+    const inv = iMap[pay[C.payment.invoiceId]];
+    return `
+      <div class="verify-card">
+        <a href="${signed?.signedUrl||'#'}" target="_blank">
+          <img src="${signed?.signedUrl||''}" alt="proof" />
+        </a>
+        <div class="info">
+          <strong>${esc(pMap[pay[C.payment.clientId]]?.[C.profile.fullName]||'—')}</strong>
+          <span>Amount: ${fmt(pay[C.payment.amount])} · Status: ${esc(pay[C.payment.status])}</span>
+          <span>Invoice: ${esc(inv?.[C.invoice.month]||'—')} · Ref: ${esc(pay[C.payment.txnRef]||'—')}</span>
+        </div>
+        <div class="row-actions">
+          <button class="btn primary" data-verify="${pay.id}">Verify</button>
+          <button class="btn ghost" data-reject="${pay.id}">Reject</button>
+        </div>
+      </div>`;
+  }));
+
+  $('#admin-body').innerHTML = `<div class="card"><h3>Pending Payment Submissions</h3>
+    ${cards.join('') || `<p class="muted">No payments</p>`}</div>`;
+
+  $$('[data-verify]').forEach(b => b.onclick = () => setPayStatus(b.dataset.verify,'verified'));
+  $$('[data-reject]').forEach(b => b.onclick = () => setPayStatus(b.dataset.reject,'rejected'));
+
+  async function setPayStatus(id, status) {
+    const { error } = await supabase.from(CONFIG.TABLES.payments)
+      .update({[C.payment.status]: status}).eq('id', id);
+    if (error) { alert(error.message); return; }
+    adminPayments();
+  }
+}
+
+async function adminAnnouncements() {
+  const C = CONFIG.COLS.announcement;
+  const { data } = await supabase.from(CONFIG.TABLES.announcements)
+    .select('*').order(C.createdAt,{ascending:false});
+  const rows = (data||[]).map(a=>`
+    <tr><td>${esc(a[C.title])}</td><td>${esc(a[C.body]).slice(0,80)}…</td>
+      <td><button class="btn ghost" data-del="${a.id}">Delete</button></td></tr>`).join('');
+  $('#admin-body').innerHTML = `
+    <div class="card">
+      <h3>New Announcement</h3>
+      <form id="an-form" class="stack">
+        <label>Title<input name="title" required /></label>
+        <label>Body<textarea name="body" rows="3" required></textarea></label>
+        <button class="btn primary" type="submit">Publish</button>
+      </form>
+    </div>
+    <div class="card" style="margin-top:20px">
+      <h3>All Announcements</h3>
+      <table class="data"><thead><tr><th>Title</th><th>Body</th><th></th></tr></thead>
+        <tbody>${rows||`<tr><td colspan="3" class="muted">None</td></tr>`}</tbody></table>
+    </div>`;
+  $('#an-form').onsubmit = async e => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    const { error } = await supabase.from(CONFIG.TABLES.announcements)
+      .insert({[C.title]:fd.get('title'), [C.body]:fd.get('body')});
+    if (error) { alert(error.message); return; }
+    adminAnnouncements();
+  };
+  $$('[data-del]').forEach(b => b.onclick = async () => {
+    if (!confirm('Delete this announcement?')) return;
+    await supabase.from(CONFIG.TABLES.announcements).delete().eq('id', b.dataset.del);
+    adminAnnouncements();
+  });
+}
+
+async function adminPortfolio() {
+  const C = CONFIG.COLS.portfolio;
+  const { data } = await supabase.from(CONFIG.TABLES.portfolio)
+    .select('*').order(C.createdAt,{ascending:false});
+  const rows = (data||[]).map(p=>`
+    <tr><td>${esc(p[C.title])}</td><td>${esc(p[C.category])}</td>
+      <td><button class="btn ghost" data-del="${p.id}">Delete</button></td></tr>`).join('');
+  $('#admin-body').innerHTML = `
+    <div class="card">
+      <h3>Add Portfolio Item</h3>
+      <form id="pf-form" class="field-grid">
+        <label>Title<input name="title" required /></label>
+        <label>Category<select name="category" required>
+          <option>Minecraft Thumbnails</option><option>YouTube Thumbnails</option>
+          <option>Logo Designs</option><option>Other Creative Projects</option>
+        </select></label>
+        <label style="grid-column:1/-1">Image<input name="image" type="file" accept="image/*" required /></label>
+        <div style="grid-column:1/-1"><button class="btn primary" type="submit">Upload</button></div>
+        <p class="error" id="pf-err" hidden style="grid-column:1/-1"></p>
+      </form>
+    </div>
+    <div class="card" style="margin-top:20px">
+      <h3>Portfolio Items</h3>
+      <table class="data"><thead><tr><th>Title</th><th>Category</th><th></th></tr></thead>
+        <tbody>${rows||`<tr><td colspan="3" class="muted">None</td></tr>`}</tbody></table>
+    </div>`;
+  $('#pf-form').onsubmit = async e => {
+    e.preventDefault();
+    $('#pf-err').hidden = true;
+    const fd = new FormData(e.target);
+    const file = fd.get('image');
+    if (!file || !file.size) return;
+    const path = `${Date.now()}-${file.name}`;
+    const up = await supabase.storage.from(CONFIG.BUCKETS.portfolio).upload(path, file, {contentType:file.type});
+    if (up.error) { $('#pf-err').hidden=false; $('#pf-err').textContent=up.error.message; return; }
+    const { data: pub } = supabase.storage.from(CONFIG.BUCKETS.portfolio).getPublicUrl(path);
+    const { error } = await supabase.from(CONFIG.TABLES.portfolio).insert({
+      [C.title]: fd.get('title'), [C.category]: fd.get('category'), [C.imageUrl]: pub.publicUrl
+    });
+    if (error) { $('#pf-err').hidden=false; $('#pf-err').textContent=error.message; return; }
+    adminPortfolio();
+  };
+  $$('[data-del]').forEach(b => b.onclick = async () => {
+    if (!confirm('Delete?')) return;
+    await supabase.from(CONFIG.TABLES.portfolio).delete().eq('id', b.dataset.del);
+    adminPortfolio();
+  });
+}
+</script>
+</body>
+</html>
