@@ -1,0 +1,2201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>SHYVANSH — Designing digital experiences that stand out</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --black: #0A0A0A;
+      --charcoal: #141414;
+      --charcoal-light: #1E1E1E;
+      --white: #FFFFFF;
+      --grey-100: #F5F5F5;
+      --grey-300: #B0B0B0;
+      --grey-500: #7A7A7A;
+      --grey-700: #2A2A2A;
+      --whatsapp-green: #25D366;
+      --radius-card: 22px;
+      --radius-sm: 12px;
+      --radius-btn: 40px;
+      --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-display: 'Plus Jakarta Sans', 'Inter', sans-serif;
+      --transition-smooth: cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--black);
+      overflow-x: clip;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: var(--font-main);
+      font-feature-settings: "ss01" on;
+      background-color: var(--black);
+      color: var(--white);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: clip;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body.intro-locking,
+    body.menu-open,
+    body.lightbox-open {
+      overflow: hidden;
+    }
+
+    h1, h2, h3, h4, .logo, .footer .brand, .section-title {
+      font-family: var(--font-display);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(16px, 4vw, 36px);
+    }
+
+    .section {
+      padding: clamp(56px, 7vw, 96px) 0;
+    }
+
+    .page-hero-section {
+      padding-top: clamp(104px, 13vw, 144px);
+    }
+
+    .section-title {
+      font-size: clamp(1.9rem, 4.8vw, 3.3rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 0.85rem;
+    }
+
+    .section-sub {
+      color: var(--grey-300);
+      font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+      max-width: 600px;
+      margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 400;
+      line-height: 1.65;
+    }
+
+    /* INTRO SPLASH ANIMATION */
+    .intro-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.06), transparent 55%),
+        #070707;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      transition: opacity 0.55s var(--transition-smooth), transform 0.7s cubic-bezier(0.76, 0, 0.24, 1), visibility 0.7s;
+    }
+
+    .intro-loader.done {
+      opacity: 0;
+      transform: translateY(-24px) scale(1.02);
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .intro-logo-wrap {
+      position: relative;
+      width: clamp(82px, 14vw, 102px);
+      height: clamp(82px, 14vw, 102px);
+      padding: 6px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.02));
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65), 0 0 40px rgba(255, 255, 255, 0.08);
+      opacity: 0;
+      transform: scale(0.82);
+      animation: introLogoIn 0.65s var(--transition-smooth) 0.08s forwards;
+    }
+
+    .intro-logo-wrap img {
+      width: 100%;
+      height: 100%;
+      border-radius: 18px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .intro-brand-wrap {
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .intro-brand {
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 4vw, 1.95rem);
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      color: var(--white);
+      opacity: 0;
+      transform: translateY(100%);
+      animation: introTextUp 0.6s var(--transition-smooth) 0.24s forwards;
+    }
+
+    .intro-brand span { color: var(--grey-500); }
+
+    .intro-bar {
+      width: min(160px, 48vw);
+      height: 2px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeSimple 0.3s ease 0.2s forwards;
+    }
+
+    .intro-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), #FFFFFF);
+      border-radius: 999px;
+      animation: introProgress 0.9s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+    }
+
+    @keyframes introLogoIn { to { opacity: 1; transform: scale(1); } }
+    @keyframes introTextUp { to { opacity: 1; transform: translateY(0); letter-spacing: 0.14em; } }
+    @keyframes introProgress { to { width: 100%; } }
+    @keyframes fadeSimple { to { opacity: 1; } }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: var(--radius-btn);
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: all 0.28s var(--transition-smooth);
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--white);
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      min-height: 48px;
+      touch-action: manipulation;
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+      box-shadow: 0 8px 28px rgba(255, 255, 255, 0.09);
+    }
+
+    .btn-secondary {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.025);
+      color: var(--white);
+    }
+
+    .card {
+      background: var(--charcoal);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--radius-card);
+      padding: clamp(20px, 3vw, 28px);
+      transition: all 0.35s var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: calc(12px + env(safe-area-inset-top)) 0 12px;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      transition: padding 0.3s var(--transition-smooth), background 0.3s, border-color 0.3s;
+    }
+
+    .navbar.scrolled {
+      padding: calc(10px + env(safe-area-inset-top)) 0 10px;
+      background: rgba(10, 10, 10, 0.94);
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: clamp(1.15rem, 2.2vw, 1.35rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo-img {
+      width: clamp(32px, 4vw, 38px);
+      height: clamp(32px, 4vw, 38px);
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .logo-text span { color: var(--grey-500); font-weight: 400; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: clamp(18px, 2.5vw, 32px);
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--grey-300);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      letter-spacing: 0.2px;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active-link {
+      color: var(--white);
+    }
+
+    .nav-links a:not(.btn)::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--white);
+      transition: width 0.3s var(--transition-smooth);
+    }
+
+    .nav-links a:not(.btn):hover::after,
+    .nav-links a:not(.btn).active-link::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      padding: 10px 22px !important;
+      min-height: 40px !important;
+      font-size: 0.82rem !important;
+      letter-spacing: 0.06em !important;
+      color: var(--black) !important;
+    }
+
+    .nav-cta:hover { color: var(--white) !important; }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      z-index: 1001;
+      touch-action: manipulation;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--white);
+      transition: all 0.3s var(--transition-smooth);
+      border-radius: 2px;
+      transform-origin: center;
+    }
+
+    .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: min(82vw, 320px);
+      height: 100dvh;
+      background: var(--charcoal);
+      padding: calc(88px + env(safe-area-inset-top)) 24px calc(32px + env(safe-area-inset-bottom));
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: right 0.38s var(--transition-smooth);
+      z-index: 999;
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      overflow-y: auto;
+    }
+
+    .mobile-menu.active { right: 0; }
+
+    .mobile-menu a {
+      color: var(--grey-300);
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 10px 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      transition: color 0.2s;
+    }
+
+    .mobile-menu a.active-link { color: var(--white); }
+
+    .mobile-menu a.mobile-cta {
+      margin-top: 16px;
+      justify-content: center;
+      border-bottom: none;
+      background: var(--white);
+      color: var(--black);
+      border-radius: var(--radius-btn);
+      font-size: 0.92rem;
+      letter-spacing: 0.06em;
+    }
+
+    .mobile-menu a.mobile-admin {
+      margin-top: auto;
+      padding-top: 20px;
+      color: var(--grey-500);
+      font-size: 0.85rem;
+      border-bottom: none;
+    }
+
+    .mobile-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.68);
+      backdrop-filter: blur(4px);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s;
+    }
+
+    .mobile-overlay.active { opacity: 1; pointer-events: all; }
+
+    /* PAGE SYSTEM */
+    .page { display: none; opacity: 0; transition: opacity 0.4s var(--transition-smooth); }
+    .page.active { display: block; opacity: 1; }
+    .page-fade-enter { animation: fadeIn 0.4s var(--transition-smooth); }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      padding: clamp(104px, 13vw, 140px) 0 clamp(56px, 7vw, 84px);
+      text-align: center;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      pointer-events: none;
+      width: min(920px, 100%);
+      height: 580px;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.025) 40%, transparent 72%);
+      filter: blur(18px);
+    }
+
+    .hero-intro { max-width: 920px; margin: 0 auto; }
+
+    .hero-mark {
+      width: clamp(86px, 11vw, 112px);
+      height: clamp(86px, 11vw, 112px);
+      margin: 0 auto clamp(18px, 2.5vw, 24px);
+      padding: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: clamp(20px, 3vw, 26px);
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.025));
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.45), 0 0 36px rgba(255, 255, 255, 0.06);
+      transition: transform 0.35s var(--transition-smooth), box-shadow 0.35s var(--transition-smooth);
+    }
+
+    .hero-logo-img {
+      width: 100%;
+      height: 100%;
+      border-radius: clamp(14px, 2.2vw, 20px);
+      object-fit: cover;
+      display: block;
+      background: #111;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      max-width: 100%;
+      padding: 8px 14px;
+      margin-bottom: clamp(18px, 2.5vw, 24px);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: 999px;
+      color: #D2D2D2;
+      background: rgba(255, 255, 255, 0.035);
+      font-size: clamp(0.6rem, 1.4vw, 0.7rem);
+      font-weight: 700;
+      letter-spacing: clamp(0.1em, 0.3vw, 0.18em);
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #F5F5F5;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+      animation: pulse 2s infinite;
+      flex-shrink: 0;
+    }
+
+    .eyebrow-divider { color: #555; }
+
+    .hero-heading {
+      margin: 0 auto clamp(16px, 2vw, 22px);
+      max-width: 980px;
+      font-size: clamp(2.45rem, 8.2vw, 6.8rem);
+      line-height: 1.02;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #FFFFFF;
+      text-wrap: balance;
+    }
+
+    .hero-heading span {
+      color: transparent;
+      background: linear-gradient(180deg, #FFFFFF 10%, #8C8C8C 95%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .hero-tagline {
+      max-width: 620px;
+      margin: 0 auto clamp(24px, 3.2vw, 32px);
+      color: #ABABAB;
+      font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+      line-height: 1.7;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-tagline strong { color: #FFFFFF; font-weight: 600; }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: clamp(22px, 3vw, 28px);
+    }
+
+    .hero-actions .btn {
+      min-height: 50px;
+      padding: 13px 26px;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+    }
+
+    .hero-actions .btn i { font-size: 0.84rem; }
+
+    .hero-focus {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px 22px;
+      color: #888;
+      font-size: clamp(0.75rem, 1.4vw, 0.82rem);
+      font-weight: 500;
+    }
+
+    .hero-focus span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .hero-focus i { color: #D0D0D0; font-size: 0.84rem; }
+
+    /* STAGGERED HERO ENTRANCE */
+    .hero-stagger {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s var(--transition-smooth), transform 0.7s var(--transition-smooth);
+    }
+
+    .hero-stagger.stagger-scale { transform: translateY(16px) scale(0.9); }
+
+    body.intro-ready .hero-stagger {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    body.intro-ready .hero-stagger[data-delay="1"] { transition-delay: 0.05s; }
+    body.intro-ready .hero-stagger[data-delay="2"] { transition-delay: 0.14s; }
+    body.intro-ready .hero-stagger[data-delay="3"] { transition-delay: 0.24s; }
+    body.intro-ready .hero-stagger[data-delay="4"] { transition-delay: 0.34s; }
+    body.intro-ready .hero-stagger[data-delay="5"] { transition-delay: 0.44s; }
+    body.intro-ready .hero-stagger[data-delay="6"] { transition-delay: 0.54s; }
+
+    .hero-section-intro { margin: clamp(56px, 8vw, 88px) auto 0; }
+
+    .section-kicker {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: #858585;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+    }
+
+    .hero-section-intro p {
+      color: #F3F3F3;
+      font: 700 clamp(1.3rem, 3vw, 2rem) / 1.3 var(--font-display);
+      letter-spacing: -0.025em;
+    }
+
+    /* SERVICE GRID */
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(14px, 2vw, 20px);
+      margin-top: clamp(24px, 3vw, 34px);
+    }
+
+    .service-card {
+      background: var(--charcoal);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: clamp(22px, 3vw, 30px);
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.35s var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      min-height: 185px;
+      justify-content: space-between;
+      touch-action: manipulation;
+    }
+
+    .service-card:active { transform: scale(0.985); }
+
+    .service-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .service-card .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.055);
+      color: #F4F4F4;
+      font-size: 1.1rem;
+    }
+
+    .service-card .card-arrow {
+      color: var(--grey-500);
+      font-size: 0.9rem;
+      transition: transform 0.3s var(--transition-smooth), color 0.3s;
+    }
+
+    .service-card h3 {
+      font-size: clamp(1.08rem, 1.5vw, 1.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .service-card p {
+      color: #9A9A9A;
+      font-size: 0.9rem;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    /* GALLERY */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+      gap: clamp(12px, 2vw, 20px);
+    }
+
+    .gallery-item {
+      background: var(--charcoal);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: all 0.35s var(--transition-smooth);
+      cursor: pointer;
+      position: relative;
+      touch-action: manipulation;
+    }
+
+    .gallery-item:active { transform: scale(0.98); }
+
+    .gallery-item img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      background: var(--charcoal-light);
+      transition: transform 0.55s var(--transition-smooth);
+    }
+
+    .gallery-item .info { padding: 12px 14px; }
+    .gallery-item .info h4 { font-size: clamp(0.85rem, 1.3vw, 0.98rem); font-weight: 600; letter-spacing: -0.01em; }
+    .gallery-item .info span { font-size: 0.78rem; color: var(--grey-500); }
+
+    /* LOGO GRID */
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 175px), 1fr));
+      gap: clamp(12px, 2vw, 20px);
+    }
+
+    .logo-item {
+      aspect-ratio: 1/1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--charcoal);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      padding: clamp(16px, 2.5vw, 24px);
+      cursor: pointer;
+      transition: all 0.35s var(--transition-smooth);
+      text-decoration: none;
+      color: var(--white);
+      touch-action: manipulation;
+    }
+
+    .logo-item:active { transform: scale(0.97); }
+
+    .logo-item img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: grayscale(0.45) brightness(1.08);
+      transition: filter 0.35s, transform 0.35s;
+    }
+
+    /* WEBSITE SHOWCASE */
+    .website-showcase {
+      margin-top: clamp(28px, 4vw, 40px);
+      display: flex;
+      flex-direction: column;
+      gap: clamp(20px, 3vw, 28px);
+    }
+
+    .website-card {
+      display: grid;
+      grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+      gap: clamp(20px, 3vw, 32px);
+      align-items: center;
+    }
+
+    .website-card img {
+      width: 100%;
+      border-radius: 14px;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      background: var(--charcoal-light);
+    }
+
+    .website-cat {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--grey-500);
+      font-weight: 600;
+    }
+
+    .website-card h3 {
+      font-size: clamp(1.25rem, 2.5vw, 1.55rem);
+      font-weight: 700;
+      margin: 8px 0 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .website-card p {
+      color: var(--grey-300);
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      line-height: 1.65;
+    }
+
+    /* PRICING */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+      gap: clamp(16px, 2.5vw, 24px);
+      margin-top: clamp(24px, 3vw, 32px);
+      align-items: stretch;
+    }
+
+    .pricing-card {
+      background: var(--charcoal);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-card);
+      padding: clamp(24px, 3.5vw, 36px) clamp(20px, 3vw, 28px);
+      transition: all 0.35s var(--transition-smooth);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pricing-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .pricing-card .price {
+      font-size: clamp(2.1rem, 4vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin: 12px 0 8px;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pricing-card .price .original-price {
+      font-size: 1.25rem;
+      color: var(--grey-500);
+      text-decoration: line-through;
+      font-weight: 600;
+    }
+
+    .pricing-card .price .discounted {
+      color: #FFD700;
+      font-size: clamp(2.1rem, 4vw, 2.6rem);
+      font-weight: 800;
+    }
+
+    .discount-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #0A0A0A;
+      background: #FFD700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      align-self: center;
+    }
+
+    .pricing-card ul { list-style: none; margin: 18px 0 26px; flex: 1; }
+
+    .pricing-card ul li {
+      padding: 7px 0;
+      color: var(--grey-300);
+      font-size: 0.93rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pricing-card ul li::before {
+      content: '—';
+      color: var(--grey-500);
+      font-weight: 300;
+    }
+
+    .pricing-card .btn { width: 100%; }
+
+    /* CONTACT */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+      gap: clamp(12px, 2vw, 16px);
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--charcoal);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+      text-decoration: none;
+      color: var(--white);
+      transition: all 0.3s var(--transition-smooth);
+      min-width: 0;
+      touch-action: manipulation;
+    }
+
+    .contact-item:active { transform: scale(0.985); }
+    .contact-item > div:last-child { min-width: 0; }
+
+    .contact-item .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.045);
+      color: #EDEDED;
+      font-size: 1.05rem;
+    }
+
+    .contact-item .label { font-weight: 600; font-size: 0.95rem; }
+    .contact-item .value {
+      color: var(--grey-500);
+      font-size: 0.84rem;
+      overflow-wrap: anywhere;
+    }
+
+    /* WHATSAPP */
+    .whatsapp-box {
+      background: #0D1418;
+      border: 1px solid rgba(37, 211, 102, 0.16);
+      border-radius: var(--radius-card);
+      padding: clamp(22px, 4vw, 40px);
+      margin-top: clamp(36px, 5vw, 56px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .whatsapp-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(37, 211, 102, 0.05), transparent 70%);
+      pointer-events: none;
+    }
+
+    .whatsapp-box .header { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+
+    .whatsapp-box .header .avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--whatsapp-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--black);
+      flex-shrink: 0;
+    }
+
+    .whatsapp-box .header .info h3 { font-size: 1.15rem; font-weight: 700; }
+    .whatsapp-box .header .info p { color: var(--grey-500); font-size: 0.83rem; }
+
+    .whatsapp-box .header .status-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--whatsapp-green);
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+
+    .whatsapp-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .whatsapp-form .full-width { grid-column: span 2; }
+
+    .whatsapp-form label {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: var(--grey-500);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    /* 16px font-size prevents iOS Safari auto-zoom on focus */
+    .whatsapp-form input, .whatsapp-form select {
+      width: 100%;
+      min-height: 50px;
+      padding: 13px 16px;
+      background: #0A1014;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      color: var(--white);
+      font-family: var(--font-main);
+      font-size: 1rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .whatsapp-form select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888888' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+
+    .whatsapp-form input:focus, .whatsapp-form select:focus {
+      outline: none;
+      border-color: rgba(37, 211, 102, 0.45);
+      box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.08);
+    }
+
+    .whatsapp-form .btn-whatsapp {
+      background: var(--whatsapp-green);
+      color: var(--black);
+      border: none;
+      font-weight: 700;
+      padding: 15px 30px;
+      border-radius: var(--radius-btn);
+      cursor: pointer;
+      transition: all 0.28s var(--transition-smooth);
+      font-size: 0.95rem;
+      letter-spacing: 0.3px;
+      min-height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      touch-action: manipulation;
+    }
+
+    .whatsapp-form .btn-whatsapp:active { transform: scale(0.98); }
+
+    /* FOOTER */
+    .footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding: clamp(40px, 6vw, 60px) 0 calc(32px + env(safe-area-inset-bottom));
+      margin-top: clamp(48px, 7vw, 80px);
+    }
+
+    .footer .container { display: flex; flex-direction: column; gap: 28px; }
+    .footer .brand { font-size: clamp(1.5rem, 3vw, 1.9rem); font-weight: 800; letter-spacing: -0.04em; color: var(--white); }
+    .footer .copy { color: var(--grey-500); font-size: 0.85rem; }
+    .footer .links { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: center; }
+    .footer .links a { color: var(--grey-500); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; padding: 4px 0; }
+    .footer .links a:hover { color: var(--white); }
+
+    /* LIGHTBOX WITH PREV / NEXT */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: max(64px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .lightbox.active { display: flex; opacity: 1; }
+
+    .lightbox-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 1120px;
+    }
+
+    .lightbox img {
+      max-width: min(86vw, 960px);
+      max-height: 74dvh;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.7);
+      animation: lightboxZoom 0.25s var(--transition-smooth);
+    }
+
+    @keyframes lightboxZoom {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .lightbox-caption {
+      color: var(--grey-300);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .lightbox .close {
+      position: absolute;
+      top: max(16px, env(safe-area-inset-top));
+      right: 16px;
+      font-size: 1.35rem;
+      color: var(--white);
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      font-family: var(--font-main);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(15, 15, 15, 0.78);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 2;
+    }
+
+    .lightbox-prev { left: 8px; }
+    .lightbox-next { right: 8px; }
+
+    /* ADMIN */
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--grey-300);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .admin-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .admin-stat-card {
+      background: var(--charcoal);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+    }
+
+    .admin-stat-card .number { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; }
+    .admin-stat-card .label {
+      font-size: 0.75rem;
+      color: var(--grey-500);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s var(--transition-smooth), transform 0.65s var(--transition-smooth);
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .page-transition-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--black);
+      z-index: 3000;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .page-transition-overlay.active { opacity: 1; pointer-events: all; }
+
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--white);
+      outline-offset: 2px;
+    }
+
+    /* DESKTOP HOVER POLISH (ONLY ON POINTER DEVICES) */
+    @media (hover: hover) and (pointer: fine) {
+      .btn-primary:hover {
+        background: transparent;
+        color: var(--white);
+        border-color: var(--white);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.12);
+        transform: translateY(-2px);
+      }
+
+      .btn-secondary:hover {
+        border-color: var(--white);
+        background: rgba(255, 255, 255, 0.06);
+        transform: translateY(-2px);
+      }
+
+      .card:hover {
+        border-color: rgba(255, 255, 255, 0.14);
+        box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 255, 255, 0.02);
+        transform: translateY(-4px);
+      }
+
+      .hero-mark:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 44px rgba(255, 255, 255, 0.1);
+      }
+
+      .service-card:hover {
+        background: var(--charcoal-light);
+        border-color: rgba(255, 255, 255, 0.16);
+        transform: translateY(-6px);
+        box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 255, 255, 0.03);
+      }
+
+      .service-card:hover .card-arrow {
+        color: var(--white);
+        transform: translate(3px, -3px);
+      }
+
+      .gallery-item:hover {
+        border-color: rgba(255, 255, 255, 0.18);
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.8);
+      }
+
+      .gallery-item:hover img { transform: scale(1.05); }
+
+      .logo-item:hover {
+        border-color: rgba(255, 255, 255, 0.18);
+        transform: scale(1.03);
+        background: var(--charcoal-light);
+      }
+
+      .logo-item:hover img {
+        filter: grayscale(0) brightness(1);
+        transform: scale(1.04);
+      }
+
+      .pricing-card:hover {
+        border-color: rgba(255, 255, 255, 0.16);
+        transform: translateY(-4px);
+        box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.9);
+      }
+
+      .contact-item:hover {
+        border-color: rgba(255, 255, 255, 0.18);
+        background: var(--charcoal-light);
+        transform: translateY(-2px);
+      }
+
+      .whatsapp-form .btn-whatsapp:hover {
+        background: #1FBE5A;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(37, 211, 102, 0.22);
+      }
+
+      .lightbox .close:hover,
+      .lightbox-nav:hover {
+        background: rgba(255, 255, 255, 0.18);
+      }
+    }
+
+    /* TABLET BREAKPOINT (641px - 960px) */
+    @media (max-width: 960px) {
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 0.85rem; }
+
+      .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .service-card:last-child { grid-column: span 2; min-height: 155px; }
+
+      .website-card { grid-template-columns: minmax(0, 300px) minmax(0, 1fr); }
+    }
+
+    /* MOBILE BREAKPOINT (<= 768px) */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .website-card { grid-template-columns: 1fr; }
+
+      .whatsapp-form { grid-template-columns: 1fr; }
+      .whatsapp-form .full-width { grid-column: span 1; }
+      .whatsapp-form .btn-whatsapp { width: 100%; }
+
+      .lightbox img { max-width: 94vw; max-height: 70dvh; }
+      .lightbox-nav { width: 38px; height: 38px; font-size: 0.85rem; }
+      .lightbox-prev { left: 4px; }
+      .lightbox-next { right: 4px; }
+    }
+
+    /* SMALL MOBILE BREAKPOINT (<= 600px) */
+    @media (max-width: 600px) {
+      .service-grid { grid-template-columns: 1fr; }
+      .service-card:last-child { grid-column: span 1; }
+      .service-card { min-height: 155px; }
+      .service-card-top { margin-bottom: 16px; }
+
+      /* Compact 2-column grids on mobile so 29 items are fast & pleasant to browse */
+      .gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .gallery-item .info { padding: 10px 12px; }
+      .gallery-item .info h4 { font-size: 0.82rem; }
+      .gallery-item .info span { font-size: 0.72rem; }
+
+      .logo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-actions .btn { width: 100%; }
+    }
+
+    /* EXTRA NARROW SCREENS (<= 380px) */
+    @media (max-width: 380px) {
+      .hero-heading { font-size: 2.2rem; }
+      .hero-eyebrow { font-size: 0.54rem; padding: 7px 10px; letter-spacing: 0.08em; }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .intro-loader { display: none !important; }
+      .hero-stagger, .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+      * { animation-duration: 0.01ms !important; }
+    }
+  </style>
+</head>
+<body class="intro-locking">
+
+  <!-- INTRO SPLASH -->
+  <div class="intro-loader" id="introLoader" aria-hidden="true">
+    <div class="intro-logo-wrap">
+      <img src="https://raw.githubusercontent.com/5hyvansh/portfolio/main/m-logo.jpg" alt="" fetchpriority="high">
+    </div>
+    <div class="intro-brand-wrap">
+      <div class="intro-brand">SHYVANSH<span>.</span></div>
+    </div>
+    <div class="intro-bar">
+      <div class="intro-bar-fill"></div>
+    </div>
+  </div>
+
+  <div class="page-transition-overlay" id="pageTransition"></div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="#" class="logo" data-page="home">
+        <img src="https://raw.githubusercontent.com/5hyvansh/portfolio/main/0708197fb5917393a3b3b96e70c48928.jpg" alt="SHYVANSH Logo" class="logo-img">
+        <span class="logo-text">SHYVANSH<span>.</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#" data-page="home" class="active-link">Home</a></li>
+        <li><a href="#" data-page="thumbnails">Thumbnails</a></li>
+        <li><a href="#" data-page="logos">Logos</a></li>
+        <li><a href="#" data-page="websites">Website Development</a></li>
+        <li><a href="#" data-page="contact" class="btn btn-primary nav-cta">HIRE ME</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <div class="mobile-menu" id="mobileMenu" aria-label="Mobile Navigation">
+    <a href="#" data-page="home" class="active-link">Home</a>
+    <a href="#" data-page="thumbnails">Thumbnails</a>
+    <a href="#" data-page="logos">Logos</a>
+    <a href="#" data-page="websites">Website Development</a>
+    <a href="#" data-page="contact" class="mobile-cta">HIRE ME</a>
+    <a href="#" data-page="admin" class="mobile-admin">Admin Dashboard (demo)</a>
+  </div>
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <section class="hero">
+      <div class="container">
+        <div class="hero-intro">
+          <div class="hero-mark hero-stagger stagger-scale" data-delay="1">
+            <img src="https://raw.githubusercontent.com/5hyvansh/portfolio/main/m-logo.jpg" alt="SHYVANSH brand mark" class="hero-logo-img" fetchpriority="high">
+          </div>
+          <div class="hero-eyebrow hero-stagger" data-delay="2">
+            <span class="eyebrow-dot"></span> CREATIVE DESIGNER <span class="eyebrow-divider">/</span> DIGITAL BUILDER
+          </div>
+          <h1 class="hero-heading hero-stagger" data-delay="3">DESIGN THAT<br><span>MAKES AN IMPACT.</span></h1>
+          <p class="hero-tagline hero-stagger" data-delay="4"><strong>I'm Shyvansh.</strong> I create bold visuals, memorable brand identities and clean digital experiences that help creators stand out.</p>
+          <div class="hero-actions hero-stagger" data-delay="5">
+            <a href="#" data-page="thumbnails" class="btn btn-primary"><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i> EXPLORE MY WORK</a>
+            <a href="#" data-page="contact" class="btn btn-secondary">LET'S WORK TOGETHER <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+          <div class="hero-focus hero-stagger" data-delay="6">
+            <span><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Visual storytelling</span>
+            <span><i class="fa-solid fa-pen-ruler" aria-hidden="true"></i> Graphic design</span>
+            <span><i class="fa-solid fa-code" aria-hidden="true"></i> Web experiences</span>
+          </div>
+        </div>
+
+        <div class="hero-section-intro reveal">
+          <span class="section-kicker">WHAT I DO</span>
+          <p>Creative work, built to leave a mark.</p>
+        </div>
+
+        <div class="service-grid">
+          <a href="#" data-page="thumbnails" class="service-card reveal">
+            <div>
+              <div class="service-card-top">
+                <div class="icon"><i class="fa-solid fa-image" aria-hidden="true"></i></div>
+                <i class="fa-solid fa-arrow-up-right-from-square card-arrow" aria-hidden="true"></i>
+              </div>
+              <h3>THUMBNAILS</h3>
+              <p>High-CTR YouTube thumbnails designed to convert.</p>
+            </div>
+          </a>
+          <a href="#" data-page="logos" class="service-card reveal">
+            <div>
+              <div class="service-card-top">
+                <div class="icon"><i class="fa-solid fa-palette" aria-hidden="true"></i></div>
+                <i class="fa-solid fa-arrow-up-right-from-square card-arrow" aria-hidden="true"></i>
+              </div>
+              <h3>LOGOS</h3>
+              <p>Minecraft logos, animated logos &amp; brand marks.</p>
+            </div>
+          </a>
+          <a href="#" data-page="websites" class="service-card reveal">
+            <div>
+              <div class="service-card-top">
+                <div class="icon"><i class="fa-solid fa-code" aria-hidden="true"></i></div>
+                <i class="fa-solid fa-arrow-up-right-from-square card-arrow" aria-hidden="true"></i>
+              </div>
+              <h3>WEBSITE DEVELOPMENT</h3>
+              <p>Clean, responsive websites for creators &amp; businesses.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="whatsapp-box reveal">
+        <div class="header">
+          <div class="avatar"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+          <div class="info">
+            <h3>Quick Inquiry</h3>
+            <p><span class="status-dot"></span>Online — typically replies in minutes</p>
+          </div>
+        </div>
+        <p style="color:var(--grey-300);margin-bottom:20px;font-size:0.95rem;">Have a project in mind? Send me a message.</p>
+        <form class="whatsapp-form" id="whatsappForm">
+          <div>
+            <label for="waUsername">Username</label>
+            <input type="text" id="waUsername" placeholder="Enter your username" required>
+          </div>
+          <div>
+            <label for="waService">Service</label>
+            <select id="waService" required>
+              <option value="Thumbnail">Thumbnail</option>
+              <option value="A/B Testing Pack">A/B Testing Pack</option>
+              <option value="Minecraft Logo">Minecraft Logo</option>
+              <option value="Animated Logo">Animated Logo</option>
+              <option value="Beginner Website">Beginner Website</option>
+              <option value="Professional Website">Professional Website</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="full-width">
+            <button type="submit" class="btn-whatsapp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> SEND MESSAGE</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- THUMBNAILS -->
+  <div class="page" id="page-thumbnails">
+    <section class="section page-hero-section">
+      <div class="container">
+        <h1 class="section-title reveal">Thumbnails</h1>
+        <p class="section-sub reveal">High-impact thumbnails that drive clicks. Personal work.</p>
+        <div class="gallery-grid" id="allThumbnails"></div>
+      </div>
+    </section>
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <h2 class="section-title reveal" style="font-size:clamp(1.6rem,3.5vw,2.1rem);">Pricing</h2>
+        <div class="pricing-grid">
+          <div class="pricing-card reveal">
+            <h3>PER THUMBNAIL</h3>
+            <div class="price">₹90</div>
+            <p style="color:var(--grey-500);font-size:0.9rem;">One custom YouTube thumbnail.</p>
+            <ul>
+              <li>Custom design</li>
+              <li>High CTR focused</li>
+              <li>1 revision</li>
+            </ul>
+            <a href="#" data-page="contact" data-select-service="Thumbnail" class="btn btn-secondary">Get Started</a>
+          </div>
+          <div class="pricing-card reveal">
+            <h3>A/B TESTING PACK</h3>
+            <div class="price">
+              <span class="original-price">₹250</span>
+              <span class="discounted" id="abDiscount">₹200</span>
+              <span class="discount-badge" id="abBadge">20% OFF</span>
+            </div>
+            <p style="color:var(--grey-500);font-size:0.9rem;">3 thumbnails for the same video, built for YouTube's A/B testing.</p>
+            <ul>
+              <li>3 thumbnails</li>
+              <li>Same YouTube topic</li>
+              <li>A/B testing optimized</li>
+            </ul>
+            <a href="#" data-page="contact" data-select-service="A/B Testing Pack" class="btn btn-secondary">Get Started</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <h2 class="section-title reveal" style="font-size:clamp(1.6rem,3.5vw,2.1rem);">CONTACT</h2>
+        <p class="section-sub reveal">Reach out on any channel — I usually reply within hours.</p>
+        <div class="contact-grid reveal">
+          <a href="mailto:shyvanshworks@gmail.com" class="contact-item">
+            <div class="icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+            <div><div class="label">Email</div><div class="value">shyvanshworks@gmail.com</div></div>
+          </a>
+          <a href="https://wa.me/918923175119" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+            <div><div class="label">WhatsApp</div><div class="value">+91 8923175119</div></div>
+          </a>
+          <a href="https://discord.gg/ATC4z4XGYu" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-discord" aria-hidden="true"></i></div>
+            <div><div class="label">Discord</div><div class="value">Join Server</div></div>
+          </a>
+          <a href="https://www.instagram.com/5hyvansh" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-instagram" aria-hidden="true"></i></div>
+            <div><div class="label">Instagram</div><div class="value">@5hyvansh</div></div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- LOGOS -->
+  <div class="page" id="page-logos">
+    <section class="section page-hero-section">
+      <div class="container">
+        <h1 class="section-title reveal">Logos</h1>
+        <p class="section-sub reveal">Minecraft logos, animated logos and brand marks.</p>
+        <h2 style="font-size:1.15rem;font-weight:700;margin:28px 0 18px;letter-spacing:0.04em;color:var(--grey-300);" class="reveal">PERSONAL LOGOS</h2>
+        <div class="logo-grid" id="myLogos"></div>
+      </div>
+    </section>
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <h2 class="section-title reveal" style="font-size:clamp(1.6rem,3.5vw,2.1rem);">Pricing</h2>
+        <div class="pricing-grid">
+          <div class="pricing-card reveal">
+            <h3>MINECRAFT LOGO</h3>
+            <div class="price">₹50</div>
+            <p style="color:var(--grey-500);font-size:0.9rem;">Custom Minecraft logo design.</p>
+            <ul>
+              <li>Custom design</li>
+              <li>High resolution</li>
+              <li>1 revision</li>
+            </ul>
+            <a href="#" data-page="contact" data-select-service="Minecraft Logo" class="btn btn-secondary">Get Started</a>
+          </div>
+          <div class="pricing-card reveal">
+            <h3>ANIMATED LOGO</h3>
+            <div class="price">₹60</div>
+            <p style="color:var(--grey-500);font-size:0.9rem;">Animated logo for your brand or channel.</p>
+            <ul>
+              <li>Custom animation</li>
+              <li>High resolution</li>
+              <li>1 revision</li>
+            </ul>
+            <a href="#" data-page="contact" data-select-service="Animated Logo" class="btn btn-secondary">Get Started</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <h2 class="section-title reveal" style="font-size:clamp(1.6rem,3.5vw,2.1rem);">CONTACT</h2>
+        <p class="section-sub reveal">Reach out on any channel — I usually reply within hours.</p>
+        <div class="contact-grid reveal">
+          <a href="mailto:shyvanshworks@gmail.com" class="contact-item">
+            <div class="icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+            <div><div class="label">Email</div><div class="value">shyvanshworks@gmail.com</div></div>
+          </a>
+          <a href="https://wa.me/918923175119" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+            <div><div class="label">WhatsApp</div><div class="value">+91 8923175119</div></div>
+          </a>
+          <a href="https://discord.gg/ATC4z4XGYu" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-discord" aria-hidden="true"></i></div>
+            <div><div class="label">Discord</div><div class="value">Join Server</div></div>
+          </a>
+          <a href="https://www.instagram.com/5hyvansh" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-instagram" aria-hidden="true"></i></div>
+            <div><div class="label">Instagram</div><div class="value">@5hyvansh</div></div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- WEBSITES -->
+  <div class="page" id="page-websites">
+    <section class="section page-hero-section">
+      <div class="container">
+        <h1 class="section-title reveal">Website Development</h1>
+        <p class="section-sub reveal">Clean, responsive websites for creators and businesses.</p>
+        <div class="website-showcase" id="websiteShowcase"></div>
+      </div>
+    </section>
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <h2 class="section-title reveal" style="font-size:clamp(1.6rem,3.5vw,2.1rem);">Pricing</h2>
+        <div class="pricing-grid">
+          <div class="pricing-card reveal">
+            <h3>BEGINNER WEBSITE</h3>
+            <div class="price">₹300</div>
+            <ul>
+              <li>Without Database</li>
+              <li>Designed for freshers</li>
+              <li>Without Admin Dashboard</li>
+              <li>Multiple Pages</li>
+              <li>Contact Information</li>
+              <li>Download Buttons</li>
+              <li>Minimum Responsive UI</li>
+            </ul>
+            <a href="#" data-page="contact" data-select-service="Beginner Website" class="btn btn-secondary">Get Started</a>
+          </div>
+          <div class="pricing-card reveal">
+            <h3>PROFESSIONAL WEBSITE</h3>
+            <div class="price">₹500</div>
+            <ul>
+              <li>With Database</li>
+              <li>Designed for professionals</li>
+              <li>With Admin Dashboard</li>
+              <li>Multiple Pages</li>
+              <li>Maximum Responsive UI</li>
+              <li>Advanced functionality</li>
+              <li>More features</li>
+            </ul>
+            <a href="#" data-page="contact" data-select-service="Professional Website" class="btn btn-secondary">Get Started</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <h2 class="section-title reveal" style="font-size:clamp(1.6rem,3.5vw,2.1rem);">CONTACT</h2>
+        <p class="section-sub reveal">Reach out on any channel — I usually reply within hours.</p>
+        <div class="contact-grid reveal">
+          <a href="mailto:shyvanshworks@gmail.com" class="contact-item">
+            <div class="icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+            <div><div class="label">Email</div><div class="value">shyvanshworks@gmail.com</div></div>
+          </a>
+          <a href="https://wa.me/918923175119" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+            <div><div class="label">WhatsApp</div><div class="value">+91 8923175119</div></div>
+          </a>
+          <a href="https://discord.gg/ATC4z4XGYu" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-discord" aria-hidden="true"></i></div>
+            <div><div class="label">Discord</div><div class="value">Join Server</div></div>
+          </a>
+          <a href="https://www.instagram.com/5hyvansh" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-instagram" aria-hidden="true"></i></div>
+            <div><div class="label">Instagram</div><div class="value">@5hyvansh</div></div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="page" id="page-contact">
+    <section class="section page-hero-section">
+      <div class="container">
+        <h1 class="section-title reveal">Contact</h1>
+        <p class="section-sub reveal">Let's build something great together. Reach out on any channel.</p>
+        <div class="contact-grid reveal">
+          <a href="mailto:shyvanshworks@gmail.com" class="contact-item">
+            <div class="icon"><i class="fa-solid fa-envelope" aria-hidden="true"></i></div>
+            <div><div class="label">Email</div><div class="value">shyvanshworks@gmail.com</div></div>
+          </a>
+          <a href="https://wa.me/918923175119" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+            <div><div class="label">WhatsApp</div><div class="value">+91 8923175119</div></div>
+          </a>
+          <a href="https://discord.gg/ATC4z4XGYu" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-discord" aria-hidden="true"></i></div>
+            <div><div class="label">Discord</div><div class="value">Join Server</div></div>
+          </a>
+          <a href="https://www.instagram.com/5hyvansh" target="_blank" rel="noopener" class="contact-item">
+            <div class="icon"><i class="fa-brands fa-instagram" aria-hidden="true"></i></div>
+            <div><div class="label">Instagram</div><div class="value">@5hyvansh</div></div>
+          </a>
+        </div>
+
+        <div class="whatsapp-box reveal">
+          <div class="header">
+            <div class="avatar"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i></div>
+            <div class="info">
+              <h3>Quick Inquiry</h3>
+              <p><span class="status-dot"></span>Online — typically replies in minutes</p>
+            </div>
+          </div>
+          <p style="color:var(--grey-300);margin-bottom:20px;font-size:0.95rem;">Have a project in mind? Send me a message.</p>
+          <form class="whatsapp-form" id="whatsappFormContact">
+            <div>
+              <label for="waUsernameContact">Username</label>
+              <input type="text" id="waUsernameContact" placeholder="Enter your username" required>
+            </div>
+            <div>
+              <label for="waServiceContact">Service</label>
+              <select id="waServiceContact" required>
+                <option value="Thumbnail">Thumbnail</option>
+                <option value="A/B Testing Pack">A/B Testing Pack</option>
+                <option value="Minecraft Logo">Minecraft Logo</option>
+                <option value="Animated Logo">Animated Logo</option>
+                <option value="Beginner Website">Beginner Website</option>
+                <option value="Professional Website">Professional Website</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="full-width">
+              <button type="submit" class="btn-whatsapp"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> SEND MESSAGE</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ADMIN -->
+  <div class="page" id="page-admin">
+    <section class="section page-hero-section">
+      <div class="container">
+        <div class="admin-badge">🔒 ADMIN DEMO — READ ONLY</div>
+        <h1 class="section-title reveal" style="font-size:clamp(1.9rem,4vw,2.5rem);">Dashboard Overview</h1>
+        <p class="section-sub reveal">This is a static demo. In production, this connects to Supabase with authentication.</p>
+        <div class="admin-stats">
+          <div class="admin-stat-card"><div class="number" id="statThumbs">29</div><div class="label">Total Thumbnails</div></div>
+          <div class="admin-stat-card"><div class="number" id="statLogos">8</div><div class="label">Total Logos</div></div>
+          <div class="admin-stat-card"><div class="number" id="statWebsites">2</div><div class="label">Total Websites</div></div>
+        </div>
+        <div style="margin-top:32px;padding:clamp(18px,3vw,24px);background:var(--charcoal);border-radius:16px;border:1px solid rgba(255,255,255,0.06);">
+          <h3 style="margin-bottom:16px;">Admin Features (production)</h3>
+          <ul style="list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px;color:var(--grey-300);font-size:0.9rem;">
+            <li>✅ Thumbnail Management</li>
+            <li>✅ Logo Management</li>
+            <li>✅ Website Project Management</li>
+            <li>✅ Service &amp; Price Management</li>
+            <li>✅ Contact Settings</li>
+            <li>✅ Secure Authentication</li>
+            <li>✅ Responsive Admin UI</li>
+          </ul>
+        </div>
+        <div style="margin-top:24px;padding:clamp(18px,3vw,24px);background:rgba(255,215,0,0.03);border:1px solid rgba(255,215,0,0.1);border-radius:16px;">
+          <p style="color:var(--grey-300);font-size:0.9rem;line-height:1.6;">
+            ⚠️ This demo does not include a real backend. For a fully dynamic site, deploy with Next.js + Supabase using the schema and code provided in the accompanying documentation.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:28px;">
+        <div>
+          <div class="brand">SHYVANSH</div>
+          <div class="copy" style="margin-top:8px;">2026–2027</div>
+          <div class="copy" style="margin-top:4px;">
+            <a href="mailto:shyvanshworks@gmail.com" style="color:var(--grey-500);text-decoration:none;">shyvanshworks@gmail.com</a>
+          </div>
+        </div>
+        <div class="links">
+          <a href="#" data-page="home">Home</a>
+          <a href="#" data-page="thumbnails">Thumbnails</a>
+          <a href="#" data-page="logos">Logos</a>
+          <a href="#" data-page="websites">Website Development</a>
+          <a href="#" data-page="contact">Contact</a>
+        </div>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,0.05);padding-top:20px;text-align:center;color:var(--grey-500);font-size:0.8rem;">
+        © 2026–2027 SHYVANSH. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image Preview">
+    <button class="close" id="lightboxClose" aria-label="Close lightbox">✕</button>
+    <div class="lightbox-stage">
+      <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous image">
+        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+      </button>
+      <img src="" alt="Preview" id="lightboxImage">
+      <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next image">
+        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      const CONFIG = {
+        email: 'shyvanshworks@gmail.com',
+        whatsapp: '918923175119',
+        discord: 'https://discord.gg/ATC4z4XGYu',
+        instagram: 'https://www.instagram.com/5hyvansh',
+        discountPercent: 20
+      };
+
+      const GITHUB_USER = '5hyvansh';
+      const REPO = 'main';
+      const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/portfolio/${REPO}/`;
+
+      const PERSONAL_THUMBS = [
+        'P-thumbnail-1.jpg', 'P-thumbnail-2.jpg', 'P-thumbnail-3.jpg',
+        'P-thumbnail-4.jpg', 'P-thumbnail-5.jpg', 'P-thumbnail-6.jpg',
+        'P-thumbnail-7.jpg', 'P-thumbnail-8.jpg', 'P-thumbnail-9.jpg',
+        'P-thumbnail-10.jpg', 'P-thumbnail-11.jpg', 'P-thumbnail-12.jpg',
+        'P-thumbnail-13.jpg', 'P-thumbnail-14.jpg', 'P-thumbnail-15.jpg',
+        'P-thumbnail-16.jpg', 'P-thumbnail-17.jpg', 'P-thumbnail-18.jpg',
+        'P-thumbnail-19.jpg', 'P-thumbnail-20.jpg', 'P-thumbnail-21.jpg',
+        'P-thumbnail-22.jpg', 'P-thumbnail-23.jpg', 'P-thumbnail-24.jpg',
+        'P-thumbnail-25.jpg', 'P-thumbnail-26.jpg', 'P-thumbnail-27.jpg',
+        'Untitled143_20260815104054.png',
+        '20143.png'
+      ];
+
+      const MY_LOGOS = [
+        'Logo-2.jpg',
+        'Untitled5_20260703220103.png',
+        'Untitled6_20260703220127.png',
+        'Untitled121_20260820144001.png',
+        'Untitled436_20261109120538.png',
+        'Untitled437_20261109120932.png',
+        'Untitled438_20261109120850.png',
+        'Untitled451_20261115085525.png'
+      ];
+
+      const WEBSITES = [
+        {
+          id: 'w1',
+          name: 'Web Rocket',
+          category: 'Business',
+          description: 'Clean, responsive website for a modern business — built with performance and clarity in mind.',
+          image: 'https://picsum.photos/seed/webrocket/640/360',
+          url: 'https://5hyvansh.github.io/webrocket/'
+        },
+        {
+          id: 'w2',
+          name: 'Portfolio Sample',
+          category: 'Portfolio',
+          description: 'Thumbnail designer portfolio template — showcasing work with contact section and smooth navigation.',
+          image: 'https://picsum.photos/seed/portfolio/640/360',
+          url: 'https://5hyvansh.github.io/thumbnail-diginer-portfolio-template-/#contact'
+        }
+      ];
+
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => document.querySelectorAll(s);
+
+      const pages = {
+        home: $('#page-home'),
+        thumbnails: $('#page-thumbnails'),
+        logos: $('#page-logos'),
+        websites: $('#page-websites'),
+        contact: $('#page-contact'),
+        admin: $('#page-admin')
+      };
+
+      /* INTRO SPLASH */
+      function runIntro() {
+        const loader = $('#introLoader');
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!loader || prefersReduced) {
+          document.body.classList.remove('intro-locking');
+          document.body.classList.add('intro-ready');
+          if (loader) loader.remove();
+          return;
+        }
+
+        const finishIntro = () => {
+          if (loader.classList.contains('done')) return;
+          loader.classList.add('done');
+          document.body.classList.remove('intro-locking');
+          requestAnimationFrame(() => document.body.classList.add('intro-ready'));
+          setTimeout(() => loader.remove(), 750);
+        };
+
+        setTimeout(finishIntro, 1250);
+        loader.addEventListener('click', finishIntro);
+      }
+
+      /* THROTTLED NAVBAR SCROLL */
+      let scrollTicking = false;
+      window.addEventListener('scroll', () => {
+        if (!scrollTicking) {
+          requestAnimationFrame(() => {
+            const nav = $('#navbar');
+            if (nav) nav.classList.toggle('scrolled', window.scrollY > 24);
+            scrollTicking = false;
+          });
+          scrollTicking = true;
+        }
+      }, { passive: true });
+
+      function updateActiveNav(pageId) {
+        $$('.nav-links a[data-page], .mobile-menu a[data-page]').forEach(a => {
+          const isMatch = a.getAttribute('data-page') === pageId && !a.classList.contains('btn') && !a.classList.contains('mobile-cta');
+          a.classList.toggle('active-link', isMatch);
+        });
+      }
+
+      function navigateTo(pageId, preselectService) {
+        const overlay = $('#pageTransition');
+        overlay.classList.add('active');
+        setTimeout(() => {
+          Object.keys(pages).forEach(id => pages[id].classList.remove('active'));
+          if (pages[pageId]) {
+            pages[pageId].classList.add('active');
+            pages[pageId].classList.add('page-fade-enter');
+            setTimeout(() => pages[pageId].classList.remove('page-fade-enter'), 400);
+          }
+
+          if (preselectService) {
+            const contactSelect = $('#waServiceContact');
+            if (contactSelect) contactSelect.value = preselectService;
+          }
+
+          updateActiveNav(pageId);
+          window.scrollTo({ top: 0, behavior: 'instant' });
+          overlay.classList.remove('active');
+          closeMobileMenu();
+          requestAnimationFrame(initReveal);
+        }, 220);
+      }
+
+      document.addEventListener('click', (e) => {
+        const link = e.target.closest('[data-page]');
+        if (link) {
+          e.preventDefault();
+          const pageId = link.getAttribute('data-page');
+          const preselectService = link.getAttribute('data-select-service');
+          if (pageId && pages[pageId]) {
+            navigateTo(pageId, preselectService);
+          }
+        }
+      });
+
+      /* MOBILE DRAWER */
+      const hamburger = $('#hamburger');
+      const mobileMenu = $('#mobileMenu');
+      const mobileOverlay = $('#mobileOverlay');
+
+      function openMobileMenu() {
+        mobileMenu.classList.add('active');
+        mobileOverlay.classList.add('active');
+        hamburger.classList.add('active');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('menu-open');
+      }
+
+      function closeMobileMenu() {
+        mobileMenu.classList.remove('active');
+        mobileOverlay.classList.remove('active');
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('menu-open');
+      }
+
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.contains('active') ? closeMobileMenu() : openMobileMenu();
+      });
+
+      mobileOverlay.addEventListener('click', closeMobileMenu);
+
+      /* RENDER GRIDS */
+      function renderThumbnails() {
+        $('#allThumbnails').innerHTML = PERSONAL_THUMBS.map((filename, i) => {
+          const title = `Thumbnail ${i + 1}`;
+          const imgUrl = `${RAW_BASE}${filename}`;
+          return `
+            <div class="gallery-item reveal" data-img="${imgUrl}" data-title="${title}">
+              <img src="${imgUrl}" alt="${title}" loading="lazy" decoding="async">
+              <div class="info"><h4>${title}</h4><span>Personal</span></div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      function renderLogos() {
+        $('#myLogos').innerHTML = MY_LOGOS.map((filename, i) => {
+          const title = `Logo ${i + 1}`;
+          const imgUrl = `${RAW_BASE}${filename}`;
+          return `
+            <div class="logo-item reveal" data-img="${imgUrl}" data-title="${title}">
+              <img src="${imgUrl}" alt="${title}" loading="lazy" decoding="async">
+            </div>
+          `;
+        }).join('');
+      }
+
+      function renderWebsites() {
+        $('#websiteShowcase').innerHTML = WEBSITES.map(w => `
+          <div class="card website-card reveal">
+            <img src="${w.image}" alt="${w.name}" loading="lazy" decoding="async">
+            <div>
+              <span class="website-cat">${w.category}</span>
+              <h3>${w.name}</h3>
+              <p>${w.description}</p>
+              <a href="${w.url}" target="_blank" rel="noopener" class="btn btn-secondary" style="padding:10px 24px;min-height:44px;font-size:0.85rem;">VIEW WEBSITE →</a>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      /* LIGHTBOX (DESKTOP KEYBOARD + MOBILE SWIPE) */
+      const lightbox = $('#lightbox');
+      const lightboxImg = $('#lightboxImage');
+      const lightboxCaption = $('#lightboxCaption');
+      const lightboxClose = $('#lightboxClose');
+      const lightboxPrev = $('#lightboxPrev');
+      const lightboxNext = $('#lightboxNext');
+
+      let currentGroup = [];
+      let currentIndex = 0;
+
+      function showLightboxItem(index) {
+        if (!currentGroup.length) return;
+        currentIndex = (index + currentGroup.length) % currentGroup.length;
+        const item = currentGroup[currentIndex];
+        lightboxImg.src = item.getAttribute('data-img');
+        lightboxCaption.textContent = `${item.getAttribute('data-title') || ''} (${currentIndex + 1} / ${currentGroup.length})`;
+      }
+
+      document.addEventListener('click', (e) => {
+        const item = e.target.closest('[data-img]');
+        if (item) {
+          currentGroup = Array.from(item.parentElement.querySelectorAll('[data-img]'));
+          const idx = currentGroup.indexOf(item);
+          showLightboxItem(idx >= 0 ? idx : 0);
+          lightbox.classList.add('active');
+          document.body.classList.add('lightbox-open');
+        }
+      });
+
+      function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.classList.remove('lightbox-open');
+      }
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightboxPrev.addEventListener('click', (e) => { e.stopPropagation(); showLightboxItem(currentIndex - 1); });
+      lightboxNext.addEventListener('click', (e) => { e.stopPropagation(); showLightboxItem(currentIndex + 1); });
+
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox || e.target === $('.lightbox-stage')) closeLightbox();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (lightbox.classList.contains('active')) closeLightbox();
+          if (mobileMenu.classList.contains('active')) closeMobileMenu();
+        } else if (lightbox.classList.contains('active')) {
+          if (e.key === 'ArrowLeft') showLightboxItem(currentIndex - 1);
+          if (e.key === 'ArrowRight') showLightboxItem(currentIndex + 1);
+        }
+      });
+
+      // Touch swipe support inside Lightbox for mobile
+      let touchStartX = 0;
+      lightbox.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      lightbox.addEventListener('touchend', (e) => {
+        const diff = e.changedTouches[0].screenX - touchStartX;
+        if (Math.abs(diff) > 45) {
+          diff > 0 ? showLightboxItem(currentIndex - 1) : showLightboxItem(currentIndex + 1);
+        }
+      }, { passive: true });
+
+      /* WHATSAPP FORMS */
+      function setupWhatsAppForm(formId, usernameId, serviceId) {
+        const form = $(formId);
+        if (!form) return;
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const username = $(usernameId).value.trim() || 'Anonymous';
+          const service = $(serviceId).value;
+          const message = `Hello Shyvansh!%0A%0AUsername: ${encodeURIComponent(username)}%0AI'm interested in: ${encodeURIComponent(service)}%0A%0APlease share the details.`;
+          window.open(`https://wa.me/${CONFIG.whatsapp}?text=${message}`, '_blank');
+        });
+      }
+
+      setupWhatsAppForm('#whatsappForm', '#waUsername', '#waService');
+      setupWhatsAppForm('#whatsappFormContact', '#waUsernameContact', '#waServiceContact');
+
+      function applyDiscounts() {
+        const abDiscount = $('#abDiscount');
+        const abBadge = $('#abBadge');
+        if (abDiscount) {
+          const original = 250;
+          const discounted = Math.round(original * (1 - CONFIG.discountPercent / 100));
+          abDiscount.textContent = `₹${discounted}`;
+          if (abBadge) abBadge.textContent = `${CONFIG.discountPercent}% OFF`;
+        }
+      }
+
+      function updateAdminStats() {
+        const t = $('#statThumbs');
+        const l = $('#statLogos');
+        const w = $('#statWebsites');
+        if (t) t.textContent = PERSONAL_THUMBS.length;
+        if (l) l.textContent = MY_LOGOS.length;
+        if (w) w.textContent = WEBSITES.length;
+      }
+
+      function initReveal() {
+        const reveals = $$('.reveal:not(.visible)');
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.06, rootMargin: '0px 0px -24px 0px' });
+        reveals.forEach(el => observer.observe(el));
+      }
+
+      function init() {
+        runIntro();
+        renderThumbnails();
+        renderLogos();
+        renderWebsites();
+        applyDiscounts();
+        updateAdminStats();
+        initReveal();
+        Object.keys(pages).forEach(id => pages[id].classList.remove('active'));
+        pages.home.classList.add('active');
+        updateActiveNav('home');
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
